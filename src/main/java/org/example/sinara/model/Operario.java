@@ -14,30 +14,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class FormularioPadrao {
+public class Operario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    private String idFuncionario;
+    private int idEmpresa;
 
-    private String idEmpresa;
+    private String url;
 
-    private double tubidezAguaBruta;
+    private String cpf;
 
-    private double tubidezAguaTratada;
+    private String nome;
 
-    private double phAguaBruta;
+    private String email;
 
-    private double phAguaTratada;
-
-    private String corAguaBruta;
-
-    private String corAguaTratada;
-
-    private double nitrato;
-
-    private double fluoreto;
-
-    private double cloroResidual;
+    private String cargo;
 }

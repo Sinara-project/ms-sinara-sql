@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,10 +21,11 @@ public class RegistroPonto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String idFuncionario;
+    private LocalDateTime horarioEntrada;
 
-    private String idEmpresa;
+    private LocalDateTime horarioSaida;
 
-    private Date horario; //colocar dateTime
+    private int idOperario;
 
+    private int idEmpresa;
 }

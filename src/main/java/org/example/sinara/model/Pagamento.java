@@ -4,24 +4,28 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Estoque {
+public class Pagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    private String idEmpresa;
+    private BigDecimal valor;
 
-    private int idProduto;
+    private LocalDateTime data;
 
-    private int quantidade;
+    private String status;
+
+    private int idCartaoCredito;
+
+    private int idEmpresa;
 }

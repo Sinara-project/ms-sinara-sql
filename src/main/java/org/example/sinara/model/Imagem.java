@@ -14,30 +14,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class FormularioAcao {
+public class Imagem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String titulo;
+    private int idOperario;
 
-    private String text;
-
-    private boolean utilizouIa;
-
-    private double turbidezAgua;
-
-    private double phAgua;
-
-    private String corAgua;
-
-    private double nitrato;
-
-    private double fluoreto;
-
-    private double cloroResidual;
-
-    private String solucao;
-
-    private String idFuncionario;
+    private String URL;
 }
