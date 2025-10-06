@@ -3,6 +3,8 @@ package org.example.sinara.controller;
 import jakarta.validation.groups.Default;
 import org.example.sinara.dto.request.OperarioRequestDTO;
 import org.example.sinara.dto.response.OperarioResponseDTO;
+import org.example.sinara.model.Operario;
+import org.example.sinara.open_api.OperarioOpenApi;
 import org.example.sinara.service.OperarioService;
 import org.example.sinara.validation.OnCreate;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/operario")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
-public class OperarioController {
+public class OperarioController implements OperarioOpenApi {
     private final OperarioService operarioService;
 
     public OperarioController(OperarioService operarioService) {
@@ -49,5 +51,16 @@ public class OperarioController {
                                                   @Validated({OnCreate.class, Default.class}) @RequestBody OperarioRequestDTO dto) {
         operarioService.atualizarOperario(id, dto);
         return ResponseEntity.ok("Operário atualizado com sucesso!");
+    }
+
+    //    Métodos derivados
+
+    @GetMapping("/buscarPorNome/{nome}")
+    public Operario buscarPorNome(@PathVariable String nome) {
+        return operarioService.buscarPorNome(nome);
+    }
+    @GetMapping("/buscarPorPontosRegistrados/{pontosRegistrados}")
+    public Operario buscarPorPontosRegistrados(@PathVariable int pontosRegistrados) {
+        return operarioService.buscarPorPontosRegistrados(pontosRegistrados);
     }
 }

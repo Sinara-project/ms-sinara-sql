@@ -3,6 +3,7 @@ package org.example.sinara.controller;
 import jakarta.validation.groups.Default;
 import org.example.sinara.dto.request.PagamentoRequestDTO;
 import org.example.sinara.dto.response.PagamentoResponseDTO;
+import org.example.sinara.open_api.PagamentoOpenApi;
 import org.example.sinara.service.PagamentoService;
 import org.example.sinara.validation.OnCreate;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/pagamento")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
-public class PagamentoController {
+public class PagamentoController implements PagamentoOpenApi {
     private final PagamentoService pagamentoService;
 
     public PagamentoController(PagamentoService pagamentoService) {
@@ -42,7 +43,7 @@ public class PagamentoController {
     @DeleteMapping("/excluir/{id}")
     public ResponseEntity<String> excluirPagamento(@PathVariable Long id) {
         pagamentoService.excluirPagamento(id);
-        return ResponseEntity.ok("Pagamento excluída com sucesso!");
+        return ResponseEntity.ok("Pagamento excluído com sucesso!");
     }
 
     @PutMapping("/atualizar/{id}")

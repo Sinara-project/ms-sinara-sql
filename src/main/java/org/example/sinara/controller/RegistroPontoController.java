@@ -3,18 +3,21 @@ package org.example.sinara.controller;
 import jakarta.validation.groups.Default;
 import org.example.sinara.dto.request.RegistroPontoRequestDTO;
 import org.example.sinara.dto.response.RegistroPontoResponseDTO;
+import org.example.sinara.model.RegistroPonto;
+import org.example.sinara.open_api.RegistroPontoOpenApi;
 import org.example.sinara.service.RegistroPontoService;
 import org.example.sinara.validation.OnCreate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/registroPonto")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
-public class RegistroPontoController {
+public class RegistroPontoController implements RegistroPontoOpenApi {
     private final RegistroPontoService registroPontoService;
 
     public RegistroPontoController(RegistroPontoService registroPontoService) {
@@ -52,4 +55,12 @@ public class RegistroPontoController {
         registroPontoService.atualizarRegistroPonto(id, dto);
         return ResponseEntity.ok("Registro de ponto atualizado com sucesso!");
     }
+
+    //    Métodos derivados
+
+    @GetMapping("/buscarPorHorarioEntrada/{horarioEntrada}")
+    public RegistroPonto buscarPorHorarioEntrada(@PathVariable LocalDateTime horarioEntrada) {return registroPontoService.buscarPorHorarioEntrada(horarioEntrada);}
+
+    @GetMapping("/buscarPorHorarioSaida/{horarioSaida}")
+    public RegistroPonto buscarPorHorarioSaida(@PathVariable LocalDateTime horarioSaida) {return registroPontoService.buscarPorHorarioSaida(horarioSaida);}
 }

@@ -7,11 +7,15 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
 
 //    Métodos derivados
 
+    Empresa findByImagemUrl (String imagemUrl);
+
+    Empresa findByCodigo (String codigo);
+
     Empresa findByCnpj (String cnpj);
 
     Empresa findByNome(String nome);
 
-    Empresa findByEmailCorporativo (String emailCorporativo);
+    Empresa findByEmail (String email);
 
     Empresa findByRamoAtuacaoLikeIgnoreCase (String ramoAtuacao);
 }

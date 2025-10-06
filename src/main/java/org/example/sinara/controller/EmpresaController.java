@@ -4,6 +4,7 @@ import jakarta.validation.groups.Default;
 import org.example.sinara.dto.request.EmpresaRequestDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.model.Empresa;
+import org.example.sinara.open_api.EmpresaOpenApi;
 import org.example.sinara.service.EmpresaService;
 import org.example.sinara.validation.OnCreate;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/empresa")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
-public class EmpresaController {
+public class EmpresaController implements EmpresaOpenApi {
 
     private final EmpresaService empresaService;
 
@@ -57,6 +58,12 @@ public class EmpresaController {
 
 //    Métodos derivados
 
+    @GetMapping("/buscarPorImageUrl/{imageUrl}")
+    public Empresa buscarPorImageUrl(@PathVariable String imageUrl) {return empresaService.buscarPorImageUrl(imageUrl);}
+
+    @GetMapping("/buscarPorCodigo/{codigo}")
+    public Empresa buscarPorCodigo(@PathVariable String codigo) {return empresaService.buscarPorCodigo(codigo);}
+
     @GetMapping("/buscarPorCnpj/{cnpj}")
     public Empresa buscarPorCnpj(@PathVariable String cnpj) {
         return empresaService.buscarPorCnpj(cnpj);
@@ -69,7 +76,7 @@ public class EmpresaController {
 
     @GetMapping("/buscarPorEmail/{email}")
     public Empresa buscarPorEmail(@PathVariable String email) {
-        return empresaService.buscarPorEmailCorporativo(email);
+        return empresaService.buscarPorEmail(email);
     }
 
     @GetMapping("/buscarPorRamoAtuacao/{ramoAtuacao}")

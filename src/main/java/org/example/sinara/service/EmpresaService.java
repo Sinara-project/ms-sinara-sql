@@ -75,8 +75,20 @@ public class EmpresaService {
         if (dto.getNome() != null) {
             empresa.setNome(dto.getNome());
         }
-        if (dto.getEmailCorporativo() != null) {
-            empresa.setEmailCorporativo(dto.getEmailCorporativo());
+        if (dto.getSenha() != null) {
+            empresa.setSenha(dto.getSenha());
+        }
+        if (dto.getSenhaAreaRestrita() != null) {
+            empresa.setSenhaAreaRestrita(dto.getSenhaAreaRestrita());
+        }
+        if (dto.getCodigo() != null) {
+            empresa.setCodigo(dto.getCodigo());
+        }
+        if (dto.getImagemUrl() != null) {
+            empresa.setImagemUrl(dto.getImagemUrl());
+        }
+        if (dto.getEmail() != null) {
+            empresa.setEmail(dto.getEmail());
         }
         if (dto.getRamoAtuacao() != null) {
             empresa.setRamoAtuacao(dto.getRamoAtuacao());
@@ -94,6 +106,22 @@ public class EmpresaService {
 
 //    Métodos derivados
 
+    public Empresa buscarPorImageUrl(String imageUrl){
+        Empresa empresa = empresaRepository.findByImagemUrl(imageUrl);
+        if (empresa == null){
+            throw new EntityNotFoundException("Empresa sem foto de perfil");
+        }
+        return empresa;
+    }
+
+    public Empresa buscarPorCodigo(String codigo){
+        Empresa empresa = empresaRepository.findByCodigo(codigo);
+        if (empresa == null){
+            throw new EntityNotFoundException("Empresa sem código");
+        }
+        return empresa;
+    }
+
     public Empresa buscarPorCnpj(String cnpj){
         Empresa empresa = empresaRepository.findByCnpj(cnpj);
         if (empresa == null){
@@ -110,8 +138,8 @@ public class EmpresaService {
         return empresa;
     }
 
-    public Empresa buscarPorEmailCorporativo(String emailCorporativo){
-        Empresa empresa = empresaRepository.findByEmailCorporativo(emailCorporativo);
+    public Empresa buscarPorEmail(String email){
+        Empresa empresa = empresaRepository.findByEmail(email);
         if (empresa == null){
             throw new EntityNotFoundException("Não contém nenhuma empresa com este e-mail");
         }

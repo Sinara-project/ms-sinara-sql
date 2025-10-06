@@ -3,6 +3,7 @@ package org.example.sinara.controller;
 import jakarta.validation.groups.Default;
 import org.example.sinara.dto.request.CartaoCreditoRequestDTO;
 import org.example.sinara.dto.response.CartaoCreditoResponseDTO;
+import org.example.sinara.open_api.CartaoCreditoOpenApi;
 import org.example.sinara.service.CartaoCreditoService;
 import org.example.sinara.validation.OnCreate;
 import org.example.sinara.validation.OnPatch;
@@ -16,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/CartaoCredito")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
-public class CartaoCreditoController {
+public class CartaoCreditoController implements CartaoCreditoOpenApi {
 
     private final CartaoCreditoService cartaoCreditoService;
 
@@ -40,14 +41,6 @@ public class CartaoCreditoController {
         cartaoCreditoService.excluirCartaoCredito(id);
         return ResponseEntity.ok("Cartão de Credito excluido com sucesso!");
     }
-
-//    @PutMapping("/atualizar/{id}")
-//    public ResponseEntity<String> atualizarCartaoCredito(@PathVariable Long id,
-//                                                   @Validated({OnCreate.class, Default.class}) @RequestBody CartaoCreditoRequestDTO dto) {
-//        CartaoCreditoService.atualizarCartaoCredito(id, dto);
-//        return ResponseEntity.ok("Produto atualizado com sucesso!");
-//    }
-
 
     @PatchMapping("/atualizarParcial/{id}")
     public ResponseEntity<String> atualizarProdutoParcial(

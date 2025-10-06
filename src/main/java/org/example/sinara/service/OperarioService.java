@@ -68,6 +68,9 @@ public class OperarioService {
         if (dto.getUrl() != null) {
             operario.setUrl(dto.getUrl());
         }
+        if (dto.getImagemUrl() != null) {
+            operario.setImagemUrl(dto.getImagemUrl());
+        }
         if (dto.getCpf() != null) {
             operario.setCpf(dto.getCpf());
         }
@@ -80,8 +83,42 @@ public class OperarioService {
         if (dto.getCargo() != null) {
             operario.setCargo(dto.getCargo());
         }
+        if (dto.getSetor() != null) {
+            operario.setSetor(dto.getSetor());
+        }
+        if (dto.getHorasPrevistas() != null) {
+            operario.setHorasPrevistas(dto.getHorasPrevistas());
+        }
+        if (dto.getFerias() != null) {
+            operario.setFerias(dto.getFerias());
+        }
+        if (dto.getAtivo() != null) {
+            operario.setAtivo(dto.getAtivo());
+        }
+        if (dto.getSenha() != null) {
+            operario.setSenha(dto.getSenha());
+        }
 
         Operario atualizado = operarioRepository.save(operario);
         return toResponseDTO(atualizado);
     }
+
+    //    Métodos derivados
+
+    public Operario buscarPorNome(String nome){
+        Operario operario = operarioRepository.findByNome(nome);
+        if (operario == null){
+            throw new EntityNotFoundException("Não contém nenhum operário com este nome");
+        }
+        return operario;
+    }
+
+    public Operario buscarPorPontosRegistrados(int pontosRegistrados){
+        Operario operario = operarioRepository.findByHorasPrevistas(pontosRegistrados);
+//        if (operario == null){
+//            throw new EntityNotFoundException("Não contém nenhum operário com este nome");
+//        }
+        return operario;
+    }
+
 }

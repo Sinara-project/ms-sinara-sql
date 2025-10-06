@@ -14,22 +14,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Permissoes {
+public class Planos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Boolean adicionarUsuario;
+    private String nome;
 
-    private Boolean responderFormulario;
+    private Double precoMensal;
 
-    private Boolean visualizarDashboards;
+    private Double precoAnual;
 
-    private Boolean criarFormulario;
-
-    private Boolean visualizarFormulario;
-
-    private Boolean editarDadoOperario;
-
-    private Long idOperario;
+    private String recursos;
 }

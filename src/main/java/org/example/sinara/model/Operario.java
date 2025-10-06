@@ -23,6 +23,8 @@ public class Operario {
 
     private String url;
 
+    private String imagemUrl;
+
     private String cpf;
 
     private String nome;
@@ -30,4 +32,14 @@ public class Operario {
     private String email;
 
     private String cargo;
+
+    private String setor;
+
+    private Integer horasPrevistas;
+
+    private Boolean ferias;
+
+    private Boolean ativo;
+
+    private String senha;
 }

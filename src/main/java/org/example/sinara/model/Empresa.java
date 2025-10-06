@@ -25,12 +25,19 @@ public class Empresa {
 
     private String nome;
 
-    private String emailCorporativo;
+    private String senha;
+
+    private String senhaAreaRestrita;
+
+    private String codigo;
+
+    private String imagemUrl;
+
+    private String email;
 
     private String ramoAtuacao;
 
     private String telefone;
 
     private String planoInicial;
-
 }

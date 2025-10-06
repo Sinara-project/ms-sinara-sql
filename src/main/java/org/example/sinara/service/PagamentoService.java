@@ -2,13 +2,9 @@ package org.example.sinara.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
-import org.example.sinara.dto.request.OperarioRequestDTO;
 import org.example.sinara.dto.request.PagamentoRequestDTO;
-import org.example.sinara.dto.response.OperarioResponseDTO;
 import org.example.sinara.dto.response.PagamentoResponseDTO;
-import org.example.sinara.model.Operario;
 import org.example.sinara.model.Pagamento;
-import org.example.sinara.repository.sql.OperarioRepository;
 import org.example.sinara.repository.sql.PagamantoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
