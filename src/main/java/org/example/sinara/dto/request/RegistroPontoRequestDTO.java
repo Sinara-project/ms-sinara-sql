@@ -23,9 +23,9 @@ public class RegistroPontoRequestDTO {
 
     @Positive(message = "O ID do operário deve ser positivo")
     @NotNull(message = "O ID do operário é obrigatório")
-    private Integer idOperario;
+    private Long idOperario;
 
     @Positive(message = "O ID da empresa deve ser positivo")
     @NotNull(message = "O ID da empresa é obrigatório")
-    private Integer idEmpresa;
+    private Long idEmpresa;
 }

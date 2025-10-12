@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.sinara.dto.request.RegistroPontoRequestDTO;
 import org.example.sinara.dto.response.RegistroPontoResponseDTO;
+import org.example.sinara.model.Empresa;
 import org.example.sinara.model.Operario;
 import org.example.sinara.model.RegistroPonto;
+import org.example.sinara.repository.sql.EmpresaRepository;
+import org.example.sinara.repository.sql.OperarioRepository;
 import org.example.sinara.repository.sql.RegistroPontoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,20 +19,50 @@ import java.util.List;
 @Service
 public class RegistroPontoService {
     private final RegistroPontoRepository registroPontoRepository;
+    private final EmpresaRepository empresaRepository;
+    private final OperarioRepository operarioRepository;
 
-    public RegistroPontoService(RegistroPontoRepository registroPontoRepository){
-        this.registroPontoRepository = registroPontoRepository;
-    }
-
-    @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    public RegistroPontoService(
+            RegistroPontoRepository registroPontoRepository,
+            EmpresaRepository empresaRepository,
+            OperarioRepository operarioRepository,
+            ObjectMapper objectMapper
+    ) {
+        this.registroPontoRepository = registroPontoRepository;
+        this.empresaRepository = empresaRepository;
+        this.operarioRepository = operarioRepository;
+        this.objectMapper = objectMapper;
+    }
+
     private RegistroPonto toEntity(RegistroPontoRequestDTO dto) {
-        return objectMapper.convertValue(dto, RegistroPonto.class);
+//        return objectMapper.convertValue(dto, RegistroPonto.class);
+        RegistroPonto registro = new RegistroPonto();
+        registro.setHorarioEntrada(dto.getHorarioEntrada());
+        registro.setHorarioSaida(dto.getHorarioSaida());
+
+        Operario operario = operarioRepository.findById(dto.getIdOperario())
+                .orElseThrow(() -> new RuntimeException("Operário não encontrado"));
+        registro.setIdOperario(operario);
+
+        Empresa empresa = empresaRepository.findById(dto.getIdEmpresa())
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+        registro.setIdEmpresa(empresa);
+
+        return registro;
     }
 
     private RegistroPontoResponseDTO toResponseDTO(RegistroPonto registroPonto) {
-        return objectMapper.convertValue(registroPonto, RegistroPontoResponseDTO.class);
+//        return objectMapper.convertValue(registroPonto, RegistroPontoResponseDTO.class);
+        RegistroPontoResponseDTO dto = new RegistroPontoResponseDTO();
+        dto.setId(registroPonto.getId());
+        dto.setHorarioEntrada(registroPonto.getHorarioEntrada());
+        dto.setHorarioSaida(registroPonto.getHorarioSaida());
+        dto.setIdOperario(registroPonto.getIdOperario().getId()); // pega apenas o ID
+        dto.setIdEmpresa(registroPonto.getIdEmpresa().getId());   // pega apenas o ID
+        return dto;
     }
 
 
@@ -74,11 +107,17 @@ public class RegistroPontoService {
             registroPonto.setHorarioSaida(dto.getHorarioSaida());
         }
         if (dto.getIdOperario() != null) {
-            registroPonto.setIdOperario(dto.getIdOperario());
+            Operario operario = operarioRepository.findById(dto.getIdOperario())
+                    .orElseThrow(() -> new RuntimeException("Operário não encontrado"));
+            registroPonto.setIdOperario(operario);
         }
+
         if (dto.getIdEmpresa() != null) {
-            registroPonto.setIdEmpresa(dto.getIdEmpresa());
+            Empresa empresa = empresaRepository.findById(dto.getIdEmpresa())
+                    .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+            registroPonto.setIdEmpresa(empresa);
         }
+
 
         RegistroPonto atualizado = registroPontoRepository.save(registroPonto);
         return toResponseDTO(atualizado);

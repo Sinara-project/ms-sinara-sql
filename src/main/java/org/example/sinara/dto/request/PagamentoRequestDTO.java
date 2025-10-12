@@ -24,9 +24,9 @@ public class PagamentoRequestDTO {
 
     @NotNull(message = "O ID do cartão de crédito é obrigatório")
     @Positive(message = "O ID do cartão de crédito deve ser positivo")
-    private int idCartaoCredito;
+    private Long idCartaoCredito;
 
     @NotNull(message = "O ID da empresa é obrigatório")
     @Positive(message = "O ID da empresa deve ser positivo")
-    private int idEmpresa;
+    private Long idEmpresa;
 }

@@ -26,5 +26,7 @@ public class CartaoCredito {
 
     private String cvv;
 
-    private int idEmpresa;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id")
+    private Empresa idEmpresa;
 }

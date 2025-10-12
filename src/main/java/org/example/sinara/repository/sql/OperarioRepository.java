@@ -7,4 +7,5 @@ public interface OperarioRepository extends JpaRepository<Operario, Long> {
     Operario findByNome(String nome);
 
     Operario findByHorasPrevistas(int horasPrevistas);
+
 }

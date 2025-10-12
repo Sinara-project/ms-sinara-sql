@@ -1,9 +1,6 @@
 package org.example.sinara.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,4 +37,8 @@ public class Empresa {
     private String telefone;
 
     private String planoInicial;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_plano", referencedColumnName = "id")
+    private Planos idPlano;
 }

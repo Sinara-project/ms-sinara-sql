@@ -20,7 +20,7 @@ public class RegistroPontoResponseDTO {
 
     private LocalDateTime horarioSaida;
 
-    private int idOperario;
+    private Long idOperario;
 
-    private int idEmpresa;
+    private Long idEmpresa;
 }

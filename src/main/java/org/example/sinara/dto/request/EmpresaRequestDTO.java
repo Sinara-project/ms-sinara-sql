@@ -57,4 +57,6 @@ public class EmpresaRequestDTO {
     @NotBlank(message = "Status da conta é obrigatório", groups = OnCreate.class)
     @Size(max = 100, message = "O plano inicial deve ter no máximo 100 caracteres")
     private String planoInicial;
+
+    private Long idPlano;
 }

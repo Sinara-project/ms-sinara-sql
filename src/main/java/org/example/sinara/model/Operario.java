@@ -1,9 +1,6 @@
 package org.example.sinara.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +15,6 @@ public class Operario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private int idEmpresa;
 
     private String url;
 
@@ -42,4 +37,8 @@ public class Operario {
     private Boolean ativo;
 
     private String senha;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id")
+    private Empresa idEmpresa;
 }

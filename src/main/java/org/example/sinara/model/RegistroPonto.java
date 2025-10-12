@@ -1,9 +1,6 @@
 package org.example.sinara.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +22,11 @@ public class RegistroPonto {
 
     private LocalDateTime horarioSaida;
 
-    private int idOperario;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_operario", referencedColumnName = "id")
+    private Operario idOperario;
 
-    private int idEmpresa;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id")
+    private Empresa idEmpresa;
 }

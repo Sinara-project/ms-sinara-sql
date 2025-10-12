@@ -30,4 +30,6 @@ public class EmpresaResponseDTO {
     private String telefone;
 
     private String planoInicial;
+
+    private Long idPlano;
 }

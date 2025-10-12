@@ -1,9 +1,6 @@
 package org.example.sinara.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -25,7 +22,11 @@ public class Pagamento {
 
     private String status;
 
-    private int idCartaoCredito;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id")
+        private Empresa idEmpresa;
 
-    private int idEmpresa;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_cartao_credito", referencedColumnName = "id")
+    private CartaoCredito idCartaoCredito;
 }
