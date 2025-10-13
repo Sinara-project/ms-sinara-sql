@@ -25,5 +25,4 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
     void mudarParaPremium(@Param("p_id_empresa") Integer empresaId,
                           @Param("p_id_cartao") Integer cartaoId);
 
-
 }
