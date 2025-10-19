@@ -1,0 +1,116 @@
+package org.example.sinara.open_api;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.example.sinara.dto.request.OperarioRequestDTO;
+import org.example.sinara.dto.response.OperarioResponseDTO;
+import org.example.sinara.model.Operario;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+import java.util.Map;
+
+public interface OperarioOpenApi {
+    @Operation(
+            summary = "Lista operário por ID",
+            description = "Retorna um produto contendo todas as informações do operário pelo seu ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Operário encontrado"),
+            @ApiResponse(responseCode = "404", description = "Operário não encontrado")
+    })
+    ResponseEntity<OperarioResponseDTO> buscarOperarioPorId(
+            @Parameter(description = "ID do operário a ser buscado", required = true)
+            Long id
+    );
+
+    @Operation(
+            summary = "Lista todos os operários",
+            description = "Retorna uma lista contendo todos os operários cadastrados no sistema."
+    )
+    @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
+    List<OperarioResponseDTO> listarOperario();
+
+    @Operation(
+            summary = "Cadastra um novo operário",
+            description = "Insere um novo operário com base nas informações fornecidas no corpo da requisição."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Operário inserido com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+    })
+    ResponseEntity<String> inserirOperario(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Dados do novo operário",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = OperarioRequestDTO.class))
+            )
+            OperarioRequestDTO dto
+    );
+
+    @Operation(
+            summary = "Exclui um operário",
+            description = "Remove permanentemente um operário com base no ID informado."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Operário excluído com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Operário não encontrado")
+    })
+    ResponseEntity<String> excluirOperario(
+            @Parameter(description = "ID do operário a ser excluído", required = true)
+            Long id
+    );
+
+    @Operation(
+            summary = "Atualiza parcialmente o operário",
+            description = "Atualiza um ou mais campos de um operário existente com base no ID informado."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Operário atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Operário não encontrado")
+    })
+    ResponseEntity<String> atualizarOperario(
+            @Parameter(description = "ID do operário a ser atualizado", required = true)
+            Long id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Campos do operário a serem atualizados",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = OperarioRequestDTO.class))
+            )
+            OperarioRequestDTO dto
+    );
+
+//    @Operation(
+//            summary = "Lista todas os nomes dos operários",
+//            description = "Retorna um objeto contendo todos os nomes cadastrados na tabela operário."
+//    )
+//    @ApiResponse(responseCode = "200", description = "Objeto retornado com sucesso")
+//    Operario buscarPorNome(
+//            @Parameter(description = "Nome do operário", required = true)
+//            String nome
+//    );
+//
+//    @Operation(
+//            summary = "Lista todas os pontos registrados dos operários",
+//            description = "Retorna um objeto contendo todas os pontos registrados cadastrados na tabela operário."
+//    )
+//    @ApiResponse(responseCode = "200", description = "Objeto retornado com sucesso")
+//    Operario buscarPorPontosRegistrados(
+//            @Parameter(description = "id do operário", required = true)
+//            Long id
+//    );
+
+    @Operation(
+            summary = "Busca o perfil do operário",
+            description = "Retorna todas as informações necessárias para a tela de perfil de um operário, com base no ID informado."
+    )
+    @ApiResponse(responseCode = "200", description = "Informações retornadas com sucesso")
+    ResponseEntity<Map<String, Object>> buscarPerfil(
+            @Parameter(description = "ID do operário", required = true)
+            Long id
+    );
+}

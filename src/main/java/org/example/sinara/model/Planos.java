@@ -4,25 +4,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Permissoes {
+public class Planos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idPermissoes;
+    private Long id;
 
-    private boolean acessoAdm;
+    private String nome;
 
-    private boolean criarFormularios;
+    private Double precoMensal;
 
-    private boolean dashboardsArea;
+    private Double precoAnual;
 
+    private String recursos;
 }

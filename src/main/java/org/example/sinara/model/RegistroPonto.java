@@ -1,15 +1,12 @@
 package org.example.sinara.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,10 +18,15 @@ public class RegistroPonto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String idFuncionario;
+    private LocalDateTime horarioEntrada;
 
-    private String idEmpresa;
+    private LocalDateTime horarioSaida;
 
-    private Date horario; //colocar dateTime
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_operario", referencedColumnName = "id")
+    private Operario operario;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id")
+    private Empresa empresa;
 }
