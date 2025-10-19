@@ -3,10 +3,12 @@ package org.example.sinara.dto.response;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Data
 public class PagamentoResponseDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,11 +16,11 @@ public class PagamentoResponseDTO {
 
     private BigDecimal valor;
 
-    private LocalDateTime dataPagamento;
+    private LocalDateTime data;
 
     private String status;
 
-    private int idCartaoCredito;
+    private Long idCartaoCredito;
 
-    private int idEmpresa;
+    private Long idEmpresa;
 }

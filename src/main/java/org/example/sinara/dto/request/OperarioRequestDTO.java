@@ -10,7 +10,7 @@ import org.example.sinara.validation.OnCreate;
 public class OperarioRequestDTO {
 
     @NotNull(message = "ID da empresa é obrigatório")
-    private Integer idEmpresa;
+    private Long idEmpresa;
 
     @Size(max = 255, message = "URL deve ter no máximo 255 caracteres")
     private String url;

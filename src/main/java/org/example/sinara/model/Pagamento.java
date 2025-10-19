@@ -24,9 +24,9 @@ public class Pagamento {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_empresa", referencedColumnName = "id")
-        private Empresa idEmpresa;
+        private Empresa Empresa;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cartao_credito", referencedColumnName = "id")
-    private CartaoCredito idCartaoCredito;
+    private CartaoCredito CartaoCredito;
 }

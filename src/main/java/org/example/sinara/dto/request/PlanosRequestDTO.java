@@ -22,5 +22,4 @@ public class PlanosRequestDTO {
     @NotBlank(message = "Recursos são obrigatórios")
     @Size(min = 5, max = 1000, message = "Recursos devem ter entre 5 e 1000 caracteres")
     private String recursos;
-
 }

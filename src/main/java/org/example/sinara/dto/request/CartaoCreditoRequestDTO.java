@@ -1,13 +1,13 @@
 package org.example.sinara.dto.request;
 
 import jakarta.validation.constraints.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 public class CartaoCreditoRequestDTO {
 
     @NotBlank(message = "O número do cartão não pode estar em branco")
@@ -28,5 +28,5 @@ public class CartaoCreditoRequestDTO {
 
     @NotNull(message = "O ID da empresa é obrigatório")
     @Positive(message = "O ID da empresa deve ser um número positivo")
-    private int idEmpresa;
+    private Long idEmpresa;
 }

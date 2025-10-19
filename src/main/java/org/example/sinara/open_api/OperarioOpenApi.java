@@ -12,6 +12,7 @@ import org.example.sinara.model.Operario;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OperarioOpenApi {
     @Operation(
@@ -83,23 +84,33 @@ public interface OperarioOpenApi {
             OperarioRequestDTO dto
     );
 
-    @Operation(
-            summary = "Lista todas os nomes dos operários",
-            description = "Retorna um objeto contendo todos os nomes cadastrados na tabela operário."
-    )
-    @ApiResponse(responseCode = "200", description = "Objeto retornado com sucesso")
-    Operario buscarPorNome(
-            @Parameter(description = "Nome do operário", required = true)
-            String nome
-    );
+//    @Operation(
+//            summary = "Lista todas os nomes dos operários",
+//            description = "Retorna um objeto contendo todos os nomes cadastrados na tabela operário."
+//    )
+//    @ApiResponse(responseCode = "200", description = "Objeto retornado com sucesso")
+//    Operario buscarPorNome(
+//            @Parameter(description = "Nome do operário", required = true)
+//            String nome
+//    );
+//
+//    @Operation(
+//            summary = "Lista todas os pontos registrados dos operários",
+//            description = "Retorna um objeto contendo todas os pontos registrados cadastrados na tabela operário."
+//    )
+//    @ApiResponse(responseCode = "200", description = "Objeto retornado com sucesso")
+//    Operario buscarPorPontosRegistrados(
+//            @Parameter(description = "id do operário", required = true)
+//            Long id
+//    );
 
     @Operation(
-            summary = "Lista todas os pontos registrados dos operários",
-            description = "Retorna um objeto contendo todas os pontos registrados cadastrados na tabela operário."
+            summary = "Busca o perfil do operário",
+            description = "Retorna todas as informações necessárias para a tela de perfil de um operário, com base no ID informado."
     )
-    @ApiResponse(responseCode = "200", description = "Objeto retornado com sucesso")
-    Operario buscarPorPontosRegistrados(
-            @Parameter(description = "pontos registrados do operário", required = true)
-            int PontosRegistrados
+    @ApiResponse(responseCode = "200", description = "Informações retornadas com sucesso")
+    ResponseEntity<Map<String, Object>> buscarPerfil(
+            @Parameter(description = "ID do operário", required = true)
+            Long id
     );
 }

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 public class EmpresaRequestDTO {
     @NotBlank(message = "CNPJ é obrigatório", groups = OnCreate.class)
-    @CNPJ(message = "CNPJ inválido")
+//    @CNPJ(message = "CNPJ inválido")
     private String cnpj;
 
     @NotBlank(message = "Nome é obrigatório")
@@ -35,10 +35,6 @@ public class EmpresaRequestDTO {
             message = "Senha da área restrita deve conter pelo menos uma letra maiúscula, uma minúscula e um número"
     )
     private String senhaAreaRestrita;
-
-    @Size(min = 6, max = 50, message = "Código deve ter no mínimo 6 caracteres e no máximo 50 caracteres")
-    @NotBlank(message = "Senha da área restrita é obrigatória")
-    private String codigo;
 
     @NotBlank(message = "A url não pode estar em branco", groups = OnCreate.class)
     @Size(max = 255, message = "URL deve ter no máximo 255 caracteres")

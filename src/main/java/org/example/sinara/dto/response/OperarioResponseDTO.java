@@ -1,5 +1,6 @@
 package org.example.sinara.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ public class OperarioResponseDTO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int idEmpresa;
+    private Long idEmpresa;
 
     private String url;
 

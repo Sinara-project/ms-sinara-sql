@@ -26,6 +26,7 @@ public class Empresa {
 
     private String senhaAreaRestrita;
 
+    @Column(unique = true, nullable = false)
     private String codigo;
 
     private String imagemUrl;

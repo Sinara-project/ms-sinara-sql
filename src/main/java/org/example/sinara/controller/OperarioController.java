@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/operario")
@@ -53,14 +54,10 @@ public class OperarioController implements OperarioOpenApi {
         return ResponseEntity.ok("Operário atualizado com sucesso!");
     }
 
-    //    Métodos derivados
-
-    @GetMapping("/buscarPorNome/{nome}")
-    public Operario buscarPorNome(@PathVariable String nome) {
-        return operarioService.buscarPorNome(nome);
-    }
-    @GetMapping("/buscarPorPontosRegistrados/{pontosRegistrados}")
-    public Operario buscarPorPontosRegistrados(@PathVariable int pontosRegistrados) {
-        return operarioService.buscarPorPontosRegistrados(pontosRegistrados);
+    //    Query
+    @GetMapping("/perfilOperario/{id}")
+    public ResponseEntity<Map<String, Object>> buscarPerfil(@PathVariable Long id) {
+        Map<String, Object> perfil = operarioService.buscarPerfilOperarioPorId(id);
+        return ResponseEntity.ok(perfil);
     }
 }

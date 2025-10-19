@@ -45,11 +45,11 @@ public class RegistroPontoService {
 
         Operario operario = operarioRepository.findById(dto.getIdOperario())
                 .orElseThrow(() -> new RuntimeException("Operário não encontrado"));
-        registro.setIdOperario(operario);
+        registro.setOperario(operario);
 
         Empresa empresa = empresaRepository.findById(dto.getIdEmpresa())
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
-        registro.setIdEmpresa(empresa);
+        registro.setEmpresa(empresa);
 
         return registro;
     }
@@ -60,8 +60,8 @@ public class RegistroPontoService {
         dto.setId(registroPonto.getId());
         dto.setHorarioEntrada(registroPonto.getHorarioEntrada());
         dto.setHorarioSaida(registroPonto.getHorarioSaida());
-        dto.setIdOperario(registroPonto.getIdOperario().getId()); // pega apenas o ID
-        dto.setIdEmpresa(registroPonto.getIdEmpresa().getId());   // pega apenas o ID
+        dto.setIdOperario(registroPonto.getOperario().getId()); // pega apenas o ID
+        dto.setIdEmpresa(registroPonto.getEmpresa().getId());   // pega apenas o ID
         return dto;
     }
 
@@ -109,13 +109,13 @@ public class RegistroPontoService {
         if (dto.getIdOperario() != null) {
             Operario operario = operarioRepository.findById(dto.getIdOperario())
                     .orElseThrow(() -> new RuntimeException("Operário não encontrado"));
-            registroPonto.setIdOperario(operario);
+            registroPonto.setOperario(operario);
         }
 
         if (dto.getIdEmpresa() != null) {
             Empresa empresa = empresaRepository.findById(dto.getIdEmpresa())
                     .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
-            registroPonto.setIdEmpresa(empresa);
+            registroPonto.setEmpresa(empresa);
         }
 
 

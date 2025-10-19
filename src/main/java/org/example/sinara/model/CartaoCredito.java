@@ -2,14 +2,12 @@ package org.example.sinara.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -28,5 +26,5 @@ public class CartaoCredito {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_empresa", referencedColumnName = "id")
-    private Empresa idEmpresa;
+    private Empresa Empresa;
 }

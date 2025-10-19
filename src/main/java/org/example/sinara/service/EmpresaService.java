@@ -8,41 +8,77 @@ import org.example.sinara.dto.response.CartaoCreditoResponseDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.model.CartaoCredito;
 import org.example.sinara.model.Empresa;
+import org.example.sinara.model.Planos;
 import org.example.sinara.repository.sql.EmpresaRepository;
+import org.example.sinara.repository.sql.PlanosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EmpresaService {
     private final EmpresaRepository empresaRepository;
-
-    public EmpresaService(EmpresaRepository empresaRepository) {
-        this.empresaRepository = empresaRepository;
-    }
+    private final PlanosRepository planosRepository; // precisa para buscar o plano (FK)
 
     @Autowired
-    private ObjectMapper objectMapper;
+    public EmpresaService(
+            EmpresaRepository empresaRepository,
+            PlanosRepository planosRepository
+    ) {
+        this.empresaRepository = empresaRepository;
+        this.planosRepository = planosRepository;
+    }
 
     private Empresa toEntity(EmpresaRequestDTO dto) {
-        return objectMapper.convertValue(dto, Empresa.class);
+        Empresa empresa = new Empresa();
+
+        empresa.setCnpj(dto.getCnpj());
+        empresa.setNome(dto.getNome());
+        empresa.setSenha(dto.getSenha());
+        empresa.setSenhaAreaRestrita(dto.getSenhaAreaRestrita());
+        empresa.setImagemUrl(dto.getImagemUrl());
+        empresa.setEmail(dto.getEmail());
+        empresa.setRamoAtuacao(dto.getRamoAtuacao());
+        empresa.setTelefone(dto.getTelefone());
+        empresa.setPlanoInicial(dto.getPlanoInicial());
+
+        Planos plano = planosRepository.findById(dto.getIdPlano())
+                .orElseThrow(() -> new RuntimeException("Plano não encontrado"));
+        empresa.setIdPlano(plano);
+
+        return empresa;
     }
 
     private EmpresaResponseDTO toResponseDTO(Empresa empresa) {
-        return objectMapper.convertValue(empresa, EmpresaResponseDTO.class);
+        EmpresaResponseDTO dto = new EmpresaResponseDTO();
+
+        dto.setId(empresa.getId());
+        dto.setCnpj(empresa.getCnpj());
+        dto.setNome(empresa.getNome());
+        dto.setSenha(empresa.getSenha());
+        dto.setSenhaAreaRestrita(empresa.getSenhaAreaRestrita());
+        dto.setCodigo(empresa.getCodigo());
+        dto.setImagemUrl(empresa.getImagemUrl());
+        dto.setEmail(empresa.getEmail());
+        dto.setRamoAtuacao(empresa.getRamoAtuacao());
+        dto.setTelefone(empresa.getTelefone());
+        dto.setPlanoInicial(empresa.getPlanoInicial());
+        dto.setIdPlano(empresa.getIdPlano().getId()); // pega apenas o ID da FK
+
+        return dto;
     }
 
 //    Métodos comuns
 
-    //Métod0 buscar por id
+    //Metodo buscar por id
     public EmpresaResponseDTO buscarPorId(Long id){
         Empresa empresa = empresaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Empresa com ID " + id + " não encontrada"));
         return toResponseDTO(empresa);
     }
 
-    //Métod0 listar empresa
+    //Metodo listar empresa
     public List<EmpresaResponseDTO> listarEmpresas(){
         return empresaRepository.findAll()
                 .stream()
@@ -50,14 +86,55 @@ public class EmpresaService {
                 .toList();
     }
 
-    //Métod0 inserir empresa
+    //Metodo inserir empresa
     public EmpresaResponseDTO inserirEmpresa(EmpresaRequestDTO dto) {
         Empresa empresa = toEntity(dto);
+
+        String codigoGerado;
+        do {
+            codigoGerado = gerarCodigoAleatorio();
+        } while (empresaRepository.existsByCodigo(codigoGerado)); // evita duplicados
+
+        empresa.setCodigo(codigoGerado);
+
         Empresa salvo = empresaRepository.save(empresa);
         return toResponseDTO(salvo);
     }
 
-    //Métod0 excluir empresa
+
+    private String gerarCodigoAleatorio() {
+        String letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String numeros = "0123456789";
+        StringBuilder codigo = new StringBuilder();
+        Random random = new Random();
+
+        //letra
+        for (int i = 0; i < 3; i++) {
+            int index = random.nextInt(letras.length());
+            codigo.append(letras.charAt(index));
+        }
+
+        //num
+        for (int i = 0; i < 3; i++) {
+            int index = random.nextInt(numeros.length());
+            codigo.append(numeros.charAt(index));
+        }
+        List<Character> chars = new ArrayList<>();
+        for (char c : codigo.toString().toCharArray()) {
+            chars.add(c);
+        }
+        Collections.shuffle(chars);
+
+        StringBuilder resultadoFinal = new StringBuilder();
+        for (char c : chars) {
+            resultadoFinal.append(c);
+        }
+
+        return resultadoFinal.toString();
+    }
+
+
+    //Metodo excluir empresa
     public void excluirEmpresa(Long id) {
         if (!empresaRepository.existsById(id)) {
             throw new EntityNotFoundException("Empresa com ID " + id + " não encontrado");
@@ -81,9 +158,6 @@ public class EmpresaService {
         if (dto.getSenhaAreaRestrita() != null) {
             empresa.setSenhaAreaRestrita(dto.getSenhaAreaRestrita());
         }
-        if (dto.getCodigo() != null) {
-            empresa.setCodigo(dto.getCodigo());
-        }
         if (dto.getImagemUrl() != null) {
             empresa.setImagemUrl(dto.getImagemUrl());
         }
@@ -104,54 +178,12 @@ public class EmpresaService {
         return toResponseDTO(atualizado);
     }
 
-//    Métodos derivados
-
-    public Empresa buscarPorImageUrl(String imageUrl){
-        Empresa empresa = empresaRepository.findByImagemUrl(imageUrl);
-        if (empresa == null){
-            throw new EntityNotFoundException("Empresa sem foto de perfil");
+//  Query
+    public Map<String, Object> buscarPerfilEmpresaPorId(Long id) {
+        Map<String, Object> perfil = empresaRepository.buscarPerfilPorId(id);
+        if (perfil == null || perfil.isEmpty()) {
+            throw new EntityNotFoundException("Empresa com ID " + id + " não encontrada");
         }
-        return empresa;
+        return perfil;
     }
-
-    public Empresa buscarPorCodigo(String codigo){
-        Empresa empresa = empresaRepository.findByCodigo(codigo);
-        if (empresa == null){
-            throw new EntityNotFoundException("Empresa sem código");
-        }
-        return empresa;
-    }
-
-    public Empresa buscarPorCnpj(String cnpj){
-        Empresa empresa = empresaRepository.findByCnpj(cnpj);
-        if (empresa == null){
-            throw new EntityNotFoundException("Não contém nenhuma empresa com este CNPJ");
-        }
-        return empresa;
-    }
-
-    public Empresa buscarPorNome(String nome){
-        Empresa empresa = empresaRepository.findByNome(nome);
-        if (empresa == null){
-            throw new EntityNotFoundException("Não contém nenhuma empresa com este nome");
-        }
-        return empresa;
-    }
-
-    public Empresa buscarPorEmail(String email){
-        Empresa empresa = empresaRepository.findByEmail(email);
-        if (empresa == null){
-            throw new EntityNotFoundException("Não contém nenhuma empresa com este e-mail");
-        }
-        return empresa;
-    }
-
-    public Empresa buscarPorRamoAtuacao(String ramoAtuacao){
-        Empresa empresa = empresaRepository.findByRamoAtuacaoLikeIgnoreCase(ramoAtuacao);
-        if (empresa == null){
-            throw new EntityNotFoundException("Não contém nenhuma empresa com este ramo de atuação");
-        }
-        return empresa;
-    }
-
 }

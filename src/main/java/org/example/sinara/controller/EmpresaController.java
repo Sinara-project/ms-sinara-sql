@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/empresa")
@@ -40,7 +41,7 @@ public class EmpresaController implements EmpresaOpenApi {
     @PostMapping("/inserir")
     public ResponseEntity<String> inserirEmpresa(@Validated({OnCreate.class, Default.class}) @RequestBody EmpresaRequestDTO dto) {
         empresaService.inserirEmpresa(dto);
-        return ResponseEntity.ok("Empresa inserido com sucesso!");
+        return ResponseEntity.ok("Empresa inserida com sucesso!");
     }
 
     @DeleteMapping("/excluir/{id}")
@@ -56,31 +57,10 @@ public class EmpresaController implements EmpresaOpenApi {
         return ResponseEntity.ok("Empresa atualizado com sucesso!");
     }
 
-//    Métodos derivados
-
-    @GetMapping("/buscarPorImageUrl/{imageUrl}")
-    public Empresa buscarPorImageUrl(@PathVariable String imageUrl) {return empresaService.buscarPorImageUrl(imageUrl);}
-
-    @GetMapping("/buscarPorCodigo/{codigo}")
-    public Empresa buscarPorCodigo(@PathVariable String codigo) {return empresaService.buscarPorCodigo(codigo);}
-
-    @GetMapping("/buscarPorCnpj/{cnpj}")
-    public Empresa buscarPorCnpj(@PathVariable String cnpj) {
-        return empresaService.buscarPorCnpj(cnpj);
-    }
-
-    @GetMapping("/buscarPorNome/{nome}")
-    public Empresa buscarPorNome(@PathVariable String nome) {
-        return empresaService.buscarPorNome(nome);
-    }
-
-    @GetMapping("/buscarPorEmail/{email}")
-    public Empresa buscarPorEmail(@PathVariable String email) {
-        return empresaService.buscarPorEmail(email);
-    }
-
-    @GetMapping("/buscarPorRamoAtuacao/{ramoAtuacao}")
-    public Empresa buscarPorRamoAtuacao(@PathVariable String ramoAtuacao) {
-        return empresaService.buscarPorRamoAtuacao(ramoAtuacao);
+//    Query
+    @GetMapping("/perfilEmpresa/{id}")
+    public ResponseEntity<Map<String, Object>> buscarPerfil(@PathVariable Long id) {
+        Map<String, Object> perfil = empresaService.buscarPerfilEmpresaPorId(id);
+        return ResponseEntity.ok(perfil);
     }
 }

@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.sinara.dto.request.CartaoCreditoRequestDTO;
 import org.example.sinara.dto.response.CartaoCreditoResponseDTO;
+import org.example.sinara.exception.CartaoDuplicadoException;
 import org.example.sinara.model.CartaoCredito;
+import org.example.sinara.model.Empresa;
 import org.example.sinara.repository.sql.CartaoCreditoRepository;
+import org.example.sinara.repository.sql.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,20 +18,50 @@ import java.util.List;
 public class CartaoCreditoService {
 
     private final CartaoCreditoRepository cartaoCreditoRepository;
-
-    public CartaoCreditoService(CartaoCreditoRepository cartaoCreditoRepository) {
-        this.cartaoCreditoRepository = cartaoCreditoRepository;
-    }
+    private final EmpresaRepository empresaRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    public CartaoCreditoService(CartaoCreditoRepository cartaoCreditoRepository,
+                                EmpresaRepository empresaRepository) {
+        this.cartaoCreditoRepository = cartaoCreditoRepository;
+        this.empresaRepository = empresaRepository;
+    }
+
     private CartaoCredito toEntity(CartaoCreditoRequestDTO dto) {
-        return objectMapper.convertValue(dto, CartaoCredito.class);
+        CartaoCredito cartaoCredito = new CartaoCredito();
+
+        cartaoCredito.setNumero(dto.getNumero());
+        cartaoCredito.setNomeTitular(dto.getNomeTitular());
+        cartaoCredito.setValidade(dto.getValidade());
+        cartaoCredito.setCvv(dto.getCvv());
+
+        if (dto.getIdEmpresa() != null) {
+            Empresa empresa = empresaRepository.findById(dto.getIdEmpresa())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Empresa com ID " + dto.getIdEmpresa() + " não encontrada"));
+            cartaoCredito.setEmpresa(empresa);
+        }
+
+        return cartaoCredito;
     }
 
     private CartaoCreditoResponseDTO toResponseDTO(CartaoCredito cartaoCredito) {
-        return objectMapper.convertValue(cartaoCredito, CartaoCreditoResponseDTO.class);
+        CartaoCreditoResponseDTO dto = new CartaoCreditoResponseDTO();
+
+        dto.setId(cartaoCredito.getId());
+        dto.setNumero(cartaoCredito.getNumero());
+        dto.setNomeTitular(cartaoCredito.getNomeTitular());
+        dto.setValidade(cartaoCredito.getValidade());
+        dto.setCvv(cartaoCredito.getCvv());
+
+        if (cartaoCredito.getEmpresa() != null) {
+            dto.setIdEmpresa(cartaoCredito.getEmpresa().getId());
+        }
+
+        return dto;
     }
 
     public CartaoCreditoResponseDTO listarPorId(Long id) {
@@ -46,6 +79,9 @@ public class CartaoCreditoService {
     }
 
     public CartaoCreditoResponseDTO inserirCartaoCredito(CartaoCreditoRequestDTO dto) {
+        if (cartaoCreditoRepository.existsByNumero(dto.getNumero())) {
+            throw new CartaoDuplicadoException(dto.getNumero());
+        }
         CartaoCredito cartaoCredito = toEntity(dto);
         CartaoCredito salvo = cartaoCreditoRepository.save(cartaoCredito);
         return toResponseDTO(salvo);
@@ -74,9 +110,12 @@ public class CartaoCreditoService {
         if (dto.getCvv() != null) {
             cartaoCredito.setCvv(dto.getCvv());
         }
-//        if (dto.getIdEmpresa() != null) {
-//            cartaoCredito.setIdEmpresa(dto.getIdEmpresa());
-//        }
+        if (dto.getIdEmpresa() != null) {
+            Empresa empresa = empresaRepository.findById(dto.getIdEmpresa())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Empresa com ID " + dto.getIdEmpresa() + " não encontrada"));
+            cartaoCredito.setEmpresa(empresa);
+        }
 
         CartaoCredito atualizado = cartaoCreditoRepository.save(cartaoCredito);
         return toResponseDTO(atualizado);

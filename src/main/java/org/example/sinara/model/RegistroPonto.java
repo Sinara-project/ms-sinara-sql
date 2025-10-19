@@ -24,9 +24,9 @@ public class RegistroPonto {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_operario", referencedColumnName = "id")
-    private Operario idOperario;
+    private Operario operario;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_empresa", referencedColumnName = "id")
-    private Empresa idEmpresa;
+    private Empresa empresa;
 }
