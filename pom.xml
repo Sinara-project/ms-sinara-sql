@@ -88,6 +88,15 @@
 
     <build>
         <plugins>
+            <!-- Maven Resources Plugin com UTF-8 -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
             <!-- Maven Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
