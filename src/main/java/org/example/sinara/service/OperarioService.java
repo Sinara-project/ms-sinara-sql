@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.sinara.dto.request.OperarioRequestDTO;
 import org.example.sinara.dto.response.OperarioResponseDTO;
+import org.example.sinara.exception.CpfDuplicadoException;
+import org.example.sinara.exception.EmailDuplicadoException;
 import org.example.sinara.model.Empresa;
 import org.example.sinara.model.Operario;
 import org.example.sinara.repository.sql.EmpresaRepository;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,10 +49,10 @@ public class OperarioService {
         operario.setEmail(dto.getEmail());
         operario.setCargo(dto.getCargo());
         operario.setSetor(dto.getSetor());
-        operario.setHorasPrevistas(dto.getHorasPrevistas());
         operario.setFerias(dto.getFerias());
         operario.setAtivo(dto.getAtivo());
         operario.setSenha(dto.getSenha());
+        dto.setHorasPrevistas(operario.getHorasPrevistas());
 
         // Associa empresa (FK)
         Empresa empresa = empresaRepository.findById(dto.getIdEmpresa())
@@ -70,17 +73,17 @@ public class OperarioService {
         dto.setEmail(operario.getEmail());
         dto.setCargo(operario.getCargo());
         dto.setSetor(operario.getSetor());
-        dto.setHorasPrevistas(operario.getHorasPrevistas());
         dto.setFerias(operario.getFerias());
         dto.setAtivo(operario.getAtivo());
         dto.setSenha(operario.getSenha());
+        dto.setHorasPrevistas(operario.getHorasPrevistas());
         dto.setIdEmpresa(operario.getIdEmpresa().getId()); // pega só o ID da empresa
 
         return dto;
     }
 
     //Métod0 buscar por id
-    public OperarioResponseDTO buscarPorId(Long id){
+    public OperarioResponseDTO buscarPorId(Integer id){
         Operario operario= operarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Operário não encontrado"));
         return toResponseDTO(operario);
@@ -96,13 +99,20 @@ public class OperarioService {
 
     //Métod0 inserir
     public OperarioResponseDTO inserirOperario(OperarioRequestDTO dto) {
+        if (operarioRepository.existsByCpf(dto.getCpf())) {
+            throw new CpfDuplicadoException(dto.getCpf());
+        }
+        if (operarioRepository.existsByEmail(dto.getEmail())) {
+            throw new EmailDuplicadoException(dto.getEmail());
+        }
+
         Operario operario = toEntity(dto);
         Operario salvo = operarioRepository.save(operario);
         return toResponseDTO(salvo);
     }
 
     //Métod0 excluir
-    public void excluirOperario(Long id) {
+    public void excluirOperario(Integer id) {
         if (!operarioRepository.existsById(id)) {
             throw new EntityNotFoundException("Operário com id " + id + " não encontrado");
         }
@@ -110,7 +120,7 @@ public class OperarioService {
     }
 
     //Métod0 atualizar
-    public OperarioResponseDTO atualizarOperario(Long id, OperarioRequestDTO dto) {
+    public OperarioResponseDTO atualizarOperario(Integer id, OperarioRequestDTO dto) {
         Operario operario = operarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Operário com ID " + id + " não encontrado"));
 
@@ -135,9 +145,6 @@ public class OperarioService {
         if (dto.getSetor() != null) {
             operario.setSetor(dto.getSetor());
         }
-        if (dto.getHorasPrevistas() != null) {
-            operario.setHorasPrevistas(dto.getHorasPrevistas());
-        }
         if (dto.getFerias() != null) {
             operario.setFerias(dto.getFerias());
         }
@@ -147,38 +154,28 @@ public class OperarioService {
         if (dto.getSenha() != null) {
             operario.setSenha(dto.getSenha());
         }
+        if (dto.getHorasPrevistas() != null) {
+            operario.setHorasPrevistas(dto.getHorasPrevistas());
+        }
 
         Operario atualizado = operarioRepository.save(operario);
         return toResponseDTO(atualizado);
     }
 
 //  Query
-    public Map<String, Object> buscarPerfilOperarioPorId(Long id) {
+    public Map<String, Object> buscarPerfilOperarioPorId(Integer id) {
         Map<String, Object> perfil = operarioRepository.buscarPerfilOperarioPorId(id);
 
         if (perfil == null || perfil.isEmpty()) {
             throw new EntityNotFoundException("Operário com ID " + id + " não encontrado");
         }
 
-        Object horasPrevistasObj = perfil.get("horasPrevistas");
-        if (horasPrevistasObj != null) {
-            int horasPorDia = ((Number) horasPrevistasObj).intValue();
-
-            LocalDate hoje = LocalDate.now();
-            YearMonth mesAtual = YearMonth.of(hoje.getYear(), hoje.getMonth());
-
-            int diasUteis = 0;
-            for (int dia = 1; dia <= mesAtual.lengthOfMonth(); dia++) {
-                DayOfWeek diaSemana = LocalDate.of(mesAtual.getYear(), mesAtual.getMonth(), dia).getDayOfWeek();
-                if (diaSemana != DayOfWeek.SATURDAY && diaSemana != DayOfWeek.SUNDAY) {
-                    diasUteis++;
-                }
-            }
-
-            int horasPrevistasMes = horasPorDia * diasUteis;
-            perfil.put("horasPrevistasMes", horasPrevistasMes);
-        }
-
         return perfil;
+    }
+
+
+    public int getHorasPrevistas(Integer idOperario) {
+        Integer horas = operarioRepository.findHorasPrevistasByOperario(idOperario);
+        return horas != null ? horas : 0;
     }
 }

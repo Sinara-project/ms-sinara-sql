@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Map;
 
-public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
+public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
 
 //    Query
     @Query(value = """
@@ -25,27 +25,20 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
         FROM empresa e
         WHERE e.id = :id
     """, nativeQuery = true)
-    Map<String, Object> buscarPerfilPorId(@Param("id") Long id);
+    Map<String, Object> buscarPerfilPorId(@Param("id") Integer id);
+
+    @Query("SELECT e.id FROM Empresa e WHERE e.cnpj = :cnpj")
+    String findIdByCnpj(@Param("cnpj") String cnpj);
 
 //    Métodos derivados
-
-//    Empresa findByImagemUrl (String imagemUrl);
-//
-//    Empresa findByCodigo (String codigo);
-//
-//    Empresa findByCnpj (String cnpj);
-//
-//    Empresa findByNome(String nome);
-//
-//    Empresa findByEmail (String email);
-//
-//    Empresa findByRamoAtuacao (Long id);
-//
     boolean existsByCodigo(String codigo);
 
     //Procedure
     @Procedure(name = "mudar_para_premium")
     void mudarParaPremium(@Param("p_id_empresa") Integer empresaId,
                           @Param("p_id_cartao") Integer cartaoId);
+
+    boolean existsByCnpj(String cnpj);
+
 
 }

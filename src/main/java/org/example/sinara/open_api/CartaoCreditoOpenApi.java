@@ -8,11 +8,25 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.example.sinara.dto.request.CartaoCreditoRequestDTO;
 import org.example.sinara.dto.response.CartaoCreditoResponseDTO;
+import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface CartaoCreditoOpenApi {
+
+    @Operation(
+            summary = "Lista cartão de crédito por id por ID",
+            description = "Retorna um produto contendo todas as informações do cartão de crédito pelo seu ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Cartão de crédito encontrado"),
+            @ApiResponse(responseCode = "404", description = "Cartão de crédito não encontrado")
+    })
+    ResponseEntity<CartaoCreditoResponseDTO> buscarCartaoCreditoPorId(
+            @Parameter(description = "ID do Cartão de crédito a ser buscada", required = true)
+            Integer id
+    );
 
     @Operation(
             summary = "Lista todos os cartões de crédito",
@@ -48,7 +62,7 @@ public interface CartaoCreditoOpenApi {
     })
     ResponseEntity<String> excluirCartaoCredito(
             @Parameter(description = "ID do cartão de crédito a ser excluído", required = true)
-            Long id
+            Integer id
     );
 
     @Operation(
@@ -61,7 +75,7 @@ public interface CartaoCreditoOpenApi {
     })
     ResponseEntity<String> atualizarProdutoParcial(
             @Parameter(description = "ID do cartão de crédito a ser atualizado", required = true)
-            Long id,
+            Integer id,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Campos do cartão de crédito a serem atualizados",
                     required = true,
@@ -69,4 +83,5 @@ public interface CartaoCreditoOpenApi {
             )
             CartaoCreditoRequestDTO dto
     );
+
 }

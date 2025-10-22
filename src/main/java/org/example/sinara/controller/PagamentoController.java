@@ -6,6 +6,7 @@ import org.example.sinara.dto.response.PagamentoResponseDTO;
 import org.example.sinara.open_api.PagamentoOpenApi;
 import org.example.sinara.service.PagamentoService;
 import org.example.sinara.validation.OnCreate;
+import org.example.sinara.validation.OnPatch;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class PagamentoController implements PagamentoOpenApi {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PagamentoResponseDTO> buscarPagamentoPorId(@PathVariable Long id) {
+    public ResponseEntity<PagamentoResponseDTO> buscarPagamentoPorId(@PathVariable Integer id) {
         PagamentoResponseDTO pagamento = pagamentoService.buscarPorId(id);
         return ResponseEntity.ok(pagamento);
     }
@@ -41,14 +42,14 @@ public class PagamentoController implements PagamentoOpenApi {
     }
 
     @DeleteMapping("/excluir/{id}")
-    public ResponseEntity<String> excluirPagamento(@PathVariable Long id) {
+    public ResponseEntity<String> excluirPagamento(@PathVariable Integer id) {
         pagamentoService.excluirPagamento(id);
         return ResponseEntity.ok("Pagamento excluído com sucesso!");
     }
 
     @PutMapping("/atualizar/{id}")
-    public ResponseEntity<String> atualizarPagamento(@PathVariable Long id,
-                                                    @Validated({OnCreate.class, Default.class}) @RequestBody PagamentoRequestDTO dto) {
+    public ResponseEntity<String> atualizarPagamento(@PathVariable Integer id,
+                                                    @Validated({OnPatch.class, Default.class}) @RequestBody PagamentoRequestDTO dto) {
         pagamentoService.atualizarPagamento(id, dto);
         return ResponseEntity.ok("Pagamento atualizado com sucesso!");
     }

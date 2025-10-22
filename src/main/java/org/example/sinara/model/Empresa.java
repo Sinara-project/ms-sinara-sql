@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Empresa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String cnpj;
 
@@ -36,8 +36,6 @@ public class Empresa {
     private String ramoAtuacao;
 
     private String telefone;
-
-    private String planoInicial;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_plano", referencedColumnName = "id")
