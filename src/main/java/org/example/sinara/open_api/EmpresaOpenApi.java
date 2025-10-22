@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.example.sinara.dto.SenhaRequestDTO;
 import org.example.sinara.dto.request.EmpresaRequestDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.model.Empresa;
@@ -26,7 +27,7 @@ public interface EmpresaOpenApi {
     })
     ResponseEntity<EmpresaResponseDTO> buscarEmpresaPorId(
             @Parameter(description = "ID da empresa a ser buscada", required = true)
-            Long id
+            Integer id
     );
 
     @Operation(
@@ -63,7 +64,7 @@ public interface EmpresaOpenApi {
     })
     ResponseEntity<String> excluirEmpresa(
             @Parameter(description = "ID da empresa a ser excluída", required = true)
-            Long id
+            Integer id
     );
 
     @Operation(
@@ -76,7 +77,7 @@ public interface EmpresaOpenApi {
     })
     ResponseEntity<String> atualizarEmpresa(
             @Parameter(description = "ID da empresa a ser atualizada", required = true)
-            Long id,
+            Integer id,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Campos da empresa a serem atualizados",
                     required = true,
@@ -92,6 +93,37 @@ public interface EmpresaOpenApi {
     @ApiResponse(responseCode = "200", description = "Informações retornadas com sucesso")
     ResponseEntity<Map<String, Object>> buscarPerfil(
             @Parameter(description = "ID da empresa", required = true)
-            Long id
+            Integer id
+    );
+
+    @Operation(
+            summary = "Busca id de empresa pelo cnpj",
+            description = "Retorna ID da empresa, com base no CNPJ informado"
+    )
+    @ApiResponse(responseCode = "200", description = "Informações retornadas com sucesso")
+    String obterId(
+            @Parameter(description = "CNPJ da empresa", required = true)
+            String cnpj
+    );
+
+    @Operation(
+            summary = "Atualiza a senha da área restrita",
+            description = "Atualiza a senha de acesso à área restrita de uma empresa com base no ID informado."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Senha atualizada com sucesso",
+                    content = @Content(schema = @Schema(implementation = EmpresaResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+    })
+    ResponseEntity<EmpresaResponseDTO> atualizarSenhaAreaRestrita(
+            @Parameter(description = "ID da empresa para atualizar a senha", required = true)
+            Integer id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Nova senha a ser atualizada",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = SenhaRequestDTO.class))
+            )
+            SenhaRequestDTO request
     );
 }

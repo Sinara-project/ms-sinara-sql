@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.sinara.dto.request.PlanosRequestDTO;
 import org.example.sinara.dto.response.PlanosResponseDTO;
+import org.example.sinara.exception.PlanoDuplicadoException;
 import org.example.sinara.model.Planos;
 import org.example.sinara.repository.sql.PlanosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class PlanosService {
     }
 
     //Métod0 buscar por id
-    public PlanosResponseDTO buscarPorId(Long id){
+    public PlanosResponseDTO buscarPorId(Integer id){
         Planos planos= planosRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Plano não encontrado"));
         return toResponseDTO(planos);
@@ -47,13 +48,17 @@ public class PlanosService {
 
     //Métod0 inserir
     public PlanosResponseDTO inserirPlanos(PlanosRequestDTO dto) {
+        if (planosRepository.existsByNome(dto.getNome())) {
+            throw new PlanoDuplicadoException(dto.getNome());
+        }
+
         Planos planos = toEntity(dto);
         Planos salvo = planosRepository.save(planos);
         return toResponseDTO(salvo);
     }
 
     //Métod0 excluir
-    public void excluirPlanos(Long id) {
+    public void excluirPlanos(Integer id) {
         if (!planosRepository.existsById(id)) {
             throw new EntityNotFoundException("Planos com id " + id + " não encontrado");
         }
@@ -61,7 +66,7 @@ public class PlanosService {
     }
 
     //Métod0 atualizar
-    public PlanosResponseDTO atualizarPlanos(Long id, PlanosRequestDTO dto) {
+    public PlanosResponseDTO atualizarPlanos(Integer id, PlanosRequestDTO dto) {
         Planos planos = planosRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Plano com ID " + id + " não encontrado"));
 

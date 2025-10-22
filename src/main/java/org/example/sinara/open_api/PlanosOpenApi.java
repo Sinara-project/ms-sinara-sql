@@ -24,7 +24,7 @@ public interface PlanosOpenApi {
     })
     ResponseEntity<PlanosResponseDTO> buscarPlanosPorId(
             @Parameter(description = "ID do plano a ser buscado", required = true)
-            Long id
+            Integer id
     );
 
     @Operation(
@@ -61,7 +61,7 @@ public interface PlanosOpenApi {
     })
     ResponseEntity<String> excluirPlanos(
             @Parameter(description = "ID do plano a ser excluído", required = true)
-            Long id
+            Integer id
     );
 
     @Operation(
@@ -74,7 +74,7 @@ public interface PlanosOpenApi {
     })
     ResponseEntity<String> atualizarPlanos(
             @Parameter(description = "ID do plano a ser atualizado", required = true)
-            Long id,
+            Integer id,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Campos do plano a serem atualizados",
                     required = true,

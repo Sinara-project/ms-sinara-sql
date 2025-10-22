@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 public class Pagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private BigDecimal valor;
 
-    private LocalDateTime data;
+    private LocalDateTime dataPagamento;
 
     private String status;
 

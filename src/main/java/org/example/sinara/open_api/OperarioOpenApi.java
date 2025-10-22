@@ -25,7 +25,7 @@ public interface OperarioOpenApi {
     })
     ResponseEntity<OperarioResponseDTO> buscarOperarioPorId(
             @Parameter(description = "ID do operário a ser buscado", required = true)
-            Long id
+            Integer id
     );
 
     @Operation(
@@ -62,7 +62,7 @@ public interface OperarioOpenApi {
     })
     ResponseEntity<String> excluirOperario(
             @Parameter(description = "ID do operário a ser excluído", required = true)
-            Long id
+            Integer id
     );
 
     @Operation(
@@ -75,7 +75,7 @@ public interface OperarioOpenApi {
     })
     ResponseEntity<String> atualizarOperario(
             @Parameter(description = "ID do operário a ser atualizado", required = true)
-            Long id,
+            Integer id,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Campos do operário a serem atualizados",
                     required = true,
@@ -101,7 +101,7 @@ public interface OperarioOpenApi {
 //    @ApiResponse(responseCode = "200", description = "Objeto retornado com sucesso")
 //    Operario buscarPorPontosRegistrados(
 //            @Parameter(description = "id do operário", required = true)
-//            Long id
+//            Integer id
 //    );
 
     @Operation(
@@ -111,6 +111,6 @@ public interface OperarioOpenApi {
     @ApiResponse(responseCode = "200", description = "Informações retornadas com sucesso")
     ResponseEntity<Map<String, Object>> buscarPerfil(
             @Parameter(description = "ID do operário", required = true)
-            Long id
+            Integer id
     );
 }

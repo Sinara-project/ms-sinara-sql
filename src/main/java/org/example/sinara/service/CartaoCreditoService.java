@@ -64,7 +64,7 @@ public class CartaoCreditoService {
         return dto;
     }
 
-    public CartaoCreditoResponseDTO listarPorId(Long id) {
+    public CartaoCreditoResponseDTO listarPorId(Integer id) {
         CartaoCredito cartaoCredito = cartaoCreditoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cartão de crédito com ID " + id + " não encontrado"));
         return toResponseDTO(cartaoCredito);
@@ -87,14 +87,14 @@ public class CartaoCreditoService {
         return toResponseDTO(salvo);
     }
 
-    public void excluirCartaoCredito(Long id) {
+    public void excluirCartaoCredito(Integer id) {
         if (!cartaoCreditoRepository.existsById(id)) {
             throw new EntityNotFoundException("Cartão de credito com ID " + id + " não encontrado");
         }
         cartaoCreditoRepository.deleteById(id);
     }
 
-    public CartaoCreditoResponseDTO atualizarCartaoCredito(Long id, CartaoCreditoRequestDTO dto) {
+    public CartaoCreditoResponseDTO atualizarCartaoCredito(Integer id, CartaoCreditoRequestDTO dto) {
         CartaoCredito cartaoCredito = cartaoCreditoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cartão de Credito com ID " + id + " não encontrado"));
 

@@ -12,15 +12,15 @@ import java.time.LocalDateTime;
 public class PagamentoResponseDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private BigDecimal valor;
 
-    private LocalDateTime data;
+    private LocalDateTime dataPagamento;
 
     private String status;
 
-    private Long idCartaoCredito;
+    private Integer idCartaoCredito;
 
-    private Long idEmpresa;
+    private Integer idEmpresa;
 }

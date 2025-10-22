@@ -6,6 +6,7 @@ import org.example.sinara.dto.response.PlanosResponseDTO;
 import org.example.sinara.open_api.PlanosOpenApi;
 import org.example.sinara.service.PlanosService;
 import org.example.sinara.validation.OnCreate;
+import org.example.sinara.validation.OnPatch;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class PlanosController implements PlanosOpenApi {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlanosResponseDTO> buscarPlanosPorId(@PathVariable Long id) {
+    public ResponseEntity<PlanosResponseDTO> buscarPlanosPorId(@PathVariable Integer id) {
         PlanosResponseDTO planos = planosService.buscarPorId(id);
         return ResponseEntity.ok(planos);
     }
@@ -41,14 +42,14 @@ public class PlanosController implements PlanosOpenApi {
     }
 
     @DeleteMapping("/excluir/{id}")
-    public ResponseEntity<String> excluirPlanos(@PathVariable Long id) {
+    public ResponseEntity<String> excluirPlanos(@PathVariable Integer id) {
         planosService.excluirPlanos(id);
         return ResponseEntity.ok("Plano excluído com sucesso!");
     }
 
     @PutMapping("/atualizar/{id}")
-    public ResponseEntity<String> atualizarPlanos(@PathVariable Long id,
-                                                     @Validated({OnCreate.class, Default.class}) @RequestBody PlanosRequestDTO dto) {
+    public ResponseEntity<String> atualizarPlanos(@PathVariable Integer id,
+                                                     @Validated({OnPatch.class, Default.class}) @RequestBody PlanosRequestDTO dto) {
         planosService.atualizarPlanos(id, dto);
         return ResponseEntity.ok("Plano atualizado com sucesso!");
     }

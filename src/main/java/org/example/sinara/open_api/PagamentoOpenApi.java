@@ -24,7 +24,7 @@ public interface PagamentoOpenApi {
     })
     ResponseEntity<PagamentoResponseDTO> buscarPagamentoPorId(
             @Parameter(description = "ID do pagamento a ser buscado", required = true)
-            Long id
+            Integer id
     );
 
     @Operation(
@@ -61,7 +61,7 @@ public interface PagamentoOpenApi {
     })
     ResponseEntity<String> excluirPagamento(
             @Parameter(description = "ID do pagamento a ser excluído", required = true)
-            Long id
+            Integer id
     );
 
     @Operation(
@@ -74,7 +74,7 @@ public interface PagamentoOpenApi {
     })
     ResponseEntity<String> atualizarPagamento(
             @Parameter(description = "ID do pagamento a ser atualizado", required = true)
-            Long id,
+            Integer id,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Campos do pagamento a serem atualizados",
                     required = true,
