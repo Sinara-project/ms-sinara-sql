@@ -11,9 +11,9 @@ import lombok.Setter;
 public class OperarioResponseDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    private Long idEmpresa;
+    private Integer idEmpresa;
 
     private String url;
 
@@ -29,11 +29,12 @@ public class OperarioResponseDTO {
 
     private String setor;
 
-    private Integer horasPrevistas;
-
     private Boolean ferias;
 
     private Boolean ativo;
 
     private String senha;
+
+    private Integer horasPrevistas;
+
 }

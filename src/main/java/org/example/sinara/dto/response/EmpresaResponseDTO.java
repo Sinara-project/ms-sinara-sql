@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 
 public class EmpresaResponseDTO {
-    private Long id;
+    private Integer id;
 
     private String cnpj;
 
@@ -29,7 +29,5 @@ public class EmpresaResponseDTO {
 
     private String telefone;
 
-    private String planoInicial;
-
-    private Long idPlano;
+    private Integer idPlano;
 }

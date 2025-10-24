@@ -6,6 +6,7 @@ import org.example.sinara.dto.request.CartaoCreditoRequestDTO;
 import org.example.sinara.dto.request.EmpresaRequestDTO;
 import org.example.sinara.dto.response.CartaoCreditoResponseDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
+import org.example.sinara.exception.CnpjDuplicadoException;
 import org.example.sinara.model.CartaoCredito;
 import org.example.sinara.model.Empresa;
 import org.example.sinara.model.Planos;
@@ -19,7 +20,7 @@ import java.util.*;
 @Service
 public class EmpresaService {
     private final EmpresaRepository empresaRepository;
-    private final PlanosRepository planosRepository; // precisa para buscar o plano (FK)
+    private final PlanosRepository planosRepository;
 
     @Autowired
     public EmpresaService(
@@ -41,7 +42,6 @@ public class EmpresaService {
         empresa.setEmail(dto.getEmail());
         empresa.setRamoAtuacao(dto.getRamoAtuacao());
         empresa.setTelefone(dto.getTelefone());
-        empresa.setPlanoInicial(dto.getPlanoInicial());
 
         Planos plano = planosRepository.findById(dto.getIdPlano())
                 .orElseThrow(() -> new RuntimeException("Plano não encontrado"));
@@ -63,7 +63,6 @@ public class EmpresaService {
         dto.setEmail(empresa.getEmail());
         dto.setRamoAtuacao(empresa.getRamoAtuacao());
         dto.setTelefone(empresa.getTelefone());
-        dto.setPlanoInicial(empresa.getPlanoInicial());
         dto.setIdPlano(empresa.getIdPlano().getId()); // pega apenas o ID da FK
 
         return dto;
@@ -72,7 +71,7 @@ public class EmpresaService {
 //    Métodos comuns
 
     //Metodo buscar por id
-    public EmpresaResponseDTO buscarPorId(Long id){
+    public EmpresaResponseDTO buscarPorId(Integer id){
         Empresa empresa = empresaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Empresa com ID " + id + " não encontrada"));
         return toResponseDTO(empresa);
@@ -88,6 +87,10 @@ public class EmpresaService {
 
     //Metodo inserir empresa
     public EmpresaResponseDTO inserirEmpresa(EmpresaRequestDTO dto) {
+        if (empresaRepository.existsByCnpj(dto.getCnpj())) {
+            throw new CnpjDuplicadoException(dto.getCnpj());
+        }
+
         Empresa empresa = toEntity(dto);
 
         String codigoGerado;
@@ -135,14 +138,14 @@ public class EmpresaService {
 
 
     //Metodo excluir empresa
-    public void excluirEmpresa(Long id) {
+    public void excluirEmpresa(Integer id) {
         if (!empresaRepository.existsById(id)) {
             throw new EntityNotFoundException("Empresa com ID " + id + " não encontrado");
         }
         empresaRepository.deleteById(id);
     }
 
-    public EmpresaResponseDTO atualizarEmpresa(Long id, EmpresaRequestDTO dto) {
+    public EmpresaResponseDTO atualizarEmpresa(Integer id, EmpresaRequestDTO dto) {
         Empresa empresa = empresaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cartão de Credito com ID " + id + " não encontrado"));
 
@@ -170,20 +173,32 @@ public class EmpresaService {
         if (dto.getTelefone() != null) {
             empresa.setTelefone(dto.getTelefone());
         }
-        if (dto.getPlanoInicial() != null) {
-            empresa.setPlanoInicial(dto.getPlanoInicial());
-        }
 
         Empresa atualizado = empresaRepository.save(empresa);
         return toResponseDTO(atualizado);
     }
 
-//  Query
-    public Map<String, Object> buscarPerfilEmpresaPorId(Long id) {
+    public EmpresaResponseDTO atualizarSenhaAreaRestrita(Integer id, String novaSenha) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Empresa com ID " + id + " não encontrada"));
+
+        // atualizar a senha da área restrita
+        empresa.setSenhaAreaRestrita(novaSenha);
+
+        Empresa atualizado = empresaRepository.save(empresa);
+        return toResponseDTO(atualizado);
+    }
+
+
+    //  Query
+    public Map<String, Object> buscarPerfilEmpresaPorId(Integer id) {
         Map<String, Object> perfil = empresaRepository.buscarPerfilPorId(id);
         if (perfil == null || perfil.isEmpty()) {
             throw new EntityNotFoundException("Empresa com ID " + id + " não encontrada");
         }
         return perfil;
+    }
+    public String obterIdEmpresaPorCnpj(String cnpj) {
+        return empresaRepository.findIdByCnpj(cnpj);
     }
 }

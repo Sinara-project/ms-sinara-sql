@@ -35,7 +35,7 @@ public class PagamentoService {
         Pagamento pagamento = new Pagamento();
 
         pagamento.setValor(dto.getValor());
-        pagamento.setData(dto.getData());
+        pagamento.setDataPagamento(dto.getDataPagamento());
         pagamento.setStatus(dto.getStatus());
 
         Empresa empresa = empresaRepository.findById(dto.getIdEmpresa())
@@ -55,7 +55,7 @@ public class PagamentoService {
 
         dto.setId(pagamento.getId());
         dto.setValor(pagamento.getValor());
-        dto.setData(pagamento.getData());
+        dto.setDataPagamento(pagamento.getDataPagamento());
         dto.setStatus(pagamento.getStatus());
 
         // Retorna apenas os IDs das FKs
@@ -71,7 +71,7 @@ public class PagamentoService {
     }
 
     //Métod0 buscar por id
-    public PagamentoResponseDTO buscarPorId(Long id){
+    public PagamentoResponseDTO buscarPorId(Integer id){
         Pagamento pagamento= pagamentoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
         return toResponseDTO(pagamento);
@@ -93,7 +93,7 @@ public class PagamentoService {
     }
 
     //Métod0 excluir
-    public void excluirPagamento(Long id) {
+    public void excluirPagamento(Integer id) {
         if (!pagamentoRepository.existsById(id)) {
             throw new EntityNotFoundException("Pagamento com id " + id + " não encontrado");
         }
@@ -101,15 +101,15 @@ public class PagamentoService {
     }
 
     //Métod0 atualizar
-    public PagamentoResponseDTO atualizarPagamento(Long id, PagamentoRequestDTO dto) {
+    public PagamentoResponseDTO atualizarPagamento(Integer id, PagamentoRequestDTO dto) {
         Pagamento pagamento = pagamentoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pagamento com ID " + id + " não encontrado"));
 
         if (dto.getValor() != null) {
             pagamento.setValor(dto.getValor());
         }
-        if (dto.getData() != null) {
-            pagamento.setData(dto.getData());
+        if (dto.getDataPagamento() != null) {
+            pagamento.setDataPagamento(dto.getDataPagamento());
         }
         if (dto.getStatus() != null) {
             pagamento.setStatus(dto.getStatus());

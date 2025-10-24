@@ -1,10 +1,12 @@
 package org.example.sinara.dto.request;
 
-import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.sinara.validation.OnCreate;
 
 import java.time.LocalDateTime;
 
@@ -13,19 +15,23 @@ import java.time.LocalDateTime;
 
 public class RegistroPontoRequestDTO {
 
-    @FutureOrPresent(message = "O horário não pode estar no futuro")
-    @NotNull(message = "O horário de entrada não pode ser nulo")
+    @PastOrPresent(message = "O horário não pode ser no futuro")
+//    @NotNull(message = "O horário de entrada não pode ser nulo", groups = OnCreate.class)
     private LocalDateTime horarioEntrada;
 
-    @FutureOrPresent(message = "O horário não pode estar no futuro")
-    @NotNull(message = "O horário de saída não pode ser nulo")
+    @PastOrPresent(message = "O horário não pode ser no futuro")
+//    @NotNull(message = "O horário de saída não pode ser nulo", groups = OnCreate.class)
     private LocalDateTime horarioSaida;
 
+//    @Positive(message = "Banco de horas deve ser positivo")
+//    @NotNull(message = "Banco de horas não pode ser nulo", groups = OnCreate.class)
+//    private Integer bancoHoras;
+
     @Positive(message = "O ID do operário deve ser positivo")
-    @NotNull(message = "O ID do operário é obrigatório")
-    private Long idOperario;
+    @NotNull(message = "O ID do operário é obrigatório", groups = OnCreate.class)
+    private Integer idOperario;
 
     @Positive(message = "O ID da empresa deve ser positivo")
-    @NotNull(message = "O ID da empresa é obrigatório")
-    private Long idEmpresa;
+    @NotNull(message = "O ID da empresa é obrigatório", groups = OnCreate.class)
+    private Integer idEmpresa;
 }
