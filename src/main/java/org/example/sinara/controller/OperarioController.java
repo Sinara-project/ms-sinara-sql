@@ -7,6 +7,7 @@ import org.example.sinara.model.Operario;
 import org.example.sinara.open_api.OperarioOpenApi;
 import org.example.sinara.service.OperarioService;
 import org.example.sinara.validation.OnCreate;
+import org.example.sinara.validation.OnPatch;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class OperarioController implements OperarioOpenApi {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OperarioResponseDTO> buscarOperarioPorId(@PathVariable Long id) {
+    public ResponseEntity<OperarioResponseDTO> buscarOperarioPorId(@PathVariable Integer id) {
         OperarioResponseDTO operario = operarioService.buscarPorId(id);
         return ResponseEntity.ok(operario);
     }
@@ -42,21 +43,21 @@ public class OperarioController implements OperarioOpenApi {
     }
 
     @DeleteMapping("/excluir/{id}")
-    public ResponseEntity<String> excluirOperario(@PathVariable Long id) {
+    public ResponseEntity<String> excluirOperario(@PathVariable Integer id) {
         operarioService.excluirOperario(id);
-        return ResponseEntity.ok("Operário excluída com sucesso!");
+        return ResponseEntity.ok("Operário excluído com sucesso!");
     }
 
     @PutMapping("/atualizar/{id}")
-    public ResponseEntity<String> atualizarOperario(@PathVariable Long id,
-                                                  @Validated({OnCreate.class, Default.class}) @RequestBody OperarioRequestDTO dto) {
+    public ResponseEntity<String> atualizarOperario(@PathVariable Integer id,
+                                                  @Validated({OnPatch.class, Default.class}) @RequestBody OperarioRequestDTO dto) {
         operarioService.atualizarOperario(id, dto);
         return ResponseEntity.ok("Operário atualizado com sucesso!");
     }
 
     //    Query
-    @GetMapping("/perfilOperario/{id}")
-    public ResponseEntity<Map<String, Object>> buscarPerfil(@PathVariable Long id) {
+    @GetMapping("/perfil-operario/{id}")
+    public ResponseEntity<Map<String, Object>> buscarPerfil(@PathVariable Integer id) {
         Map<String, Object> perfil = operarioService.buscarPerfilOperarioPorId(id);
         return ResponseEntity.ok(perfil);
     }

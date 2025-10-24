@@ -3,6 +3,7 @@ package org.example.sinara.controller;
 import jakarta.validation.groups.Default;
 import org.example.sinara.dto.request.CartaoCreditoRequestDTO;
 import org.example.sinara.dto.response.CartaoCreditoResponseDTO;
+import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.open_api.CartaoCreditoOpenApi;
 import org.example.sinara.service.CartaoCreditoService;
 import org.example.sinara.validation.OnCreate;
@@ -25,6 +26,12 @@ public class CartaoCreditoController implements CartaoCreditoOpenApi {
         this.cartaoCreditoService = cartaoCreditoService;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CartaoCreditoResponseDTO> buscarCartaoCreditoPorId(@PathVariable Integer id) {
+        CartaoCreditoResponseDTO cartaoCredito = cartaoCreditoService.listarPorId(id);
+        return ResponseEntity.ok(cartaoCredito);
+    }
+
     @GetMapping("/listar")
     public List<CartaoCreditoResponseDTO> listarCartaoCredito(){
         return cartaoCreditoService.listarCartaoCredito();
@@ -37,14 +44,14 @@ public class CartaoCreditoController implements CartaoCreditoOpenApi {
     }
 
     @DeleteMapping("/excluir/{id}")
-    public ResponseEntity<String> excluirCartaoCredito(@PathVariable Long id) {
+    public ResponseEntity<String> excluirCartaoCredito(@PathVariable Integer id) {
         cartaoCreditoService.excluirCartaoCredito(id);
         return ResponseEntity.ok("Cartão de Credito excluido com sucesso!");
     }
 
-    @PatchMapping("/atualizarParcial/{id}")
+    @PatchMapping("/atualizar/{id}")
     public ResponseEntity<String> atualizarProdutoParcial(
-            @PathVariable Long id,
+            @PathVariable Integer id,
             @Validated({OnPatch.class, Default.class}) @RequestBody CartaoCreditoRequestDTO dto) {
         cartaoCreditoService.atualizarCartaoCredito(id, dto);
         return ResponseEntity.status(HttpStatus.OK).body("Produto parcialmente atualizado com sucesso");

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class CartaoCreditoResponseDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String numero;
 
@@ -21,5 +21,5 @@ public class CartaoCreditoResponseDTO {
 
     private String cvv;
 
-    private Long idEmpresa;
+    private Integer idEmpresa;
 }
