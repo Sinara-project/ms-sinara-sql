@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/registroPonto")
+@RequestMapping("/api/user/registroPonto")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class RegistroPontoController implements RegistroPontoOpenApi {
     private final RegistroPontoService registroPontoService;

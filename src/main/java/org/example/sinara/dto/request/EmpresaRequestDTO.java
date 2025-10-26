@@ -29,7 +29,6 @@ public class EmpresaRequestDTO {
     private String senha;
 
     @Size(min = 8, max = 255, message = "Senha da área restrita deve ter no mínimo 8 caracteres e no máximo 255 caracteres")
-    @NotBlank(message = "Senha da área restrita é obrigatória", groups = OnCreate.class)
     @Pattern(
             regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).*$",
             message = "Senha da área restrita deve conter pelo menos uma letra maiúscula, uma minúscula e um número"

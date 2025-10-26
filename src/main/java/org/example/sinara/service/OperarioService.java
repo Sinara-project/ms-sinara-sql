@@ -10,13 +10,18 @@ import org.example.sinara.model.Empresa;
 import org.example.sinara.model.Operario;
 import org.example.sinara.repository.sql.EmpresaRepository;
 import org.example.sinara.repository.sql.OperarioRepository;
+import org.example.sinara.utils.HttpClientPython;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.HashMap;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -25,16 +30,20 @@ public class OperarioService {
     private final OperarioRepository operarioRepository;
     private final EmpresaRepository empresaRepository;
     private ObjectMapper objectMapper;
+    private static final String RECONHECIMENTO_DIR = "uploads/reconhecimento";
+    private final HttpClientPython httpClientPython;
 
     @Autowired
     public OperarioService(
             OperarioRepository operarioRepository,
             EmpresaRepository empresaRepository,
-            ObjectMapper objectMapper
+            ObjectMapper objectMapper,
+            HttpClientPython httpClientPython
     ) {
         this.operarioRepository = operarioRepository;
         this.empresaRepository = empresaRepository;
         this.objectMapper = objectMapper;
+        this.httpClientPython = httpClientPython;
     }
 
 
@@ -178,4 +187,44 @@ public class OperarioService {
         Integer horas = operarioRepository.findHorasPrevistasByOperario(idOperario);
         return horas != null ? horas : 0;
     }
+
+//    Reconhecimento facil
+
+    @Transactional
+    public void atualizarFotoReconhecimento(Integer idOperario, MultipartFile file) {
+        Operario operario = operarioRepository.findById(idOperario)
+                .orElseThrow(() -> new EntityNotFoundException("Operário não encontrado"));
+
+        try {
+            // Garante que a pasta exista
+            Path dir = Paths.get(RECONHECIMENTO_DIR);
+            if (!Files.exists(dir)) {
+                Files.createDirectories(dir);
+            }
+
+            // Salva o arquivo localmente
+            String fileName = "operario_" + idOperario + "_" + LocalDateTime.now().toString().replace(":", "-") + ".jpg";
+            Path filePath = dir.resolve(fileName);
+            Files.write(filePath, file.getBytes());
+
+            // Atualiza no banco a URL local
+            operario.setUrl(filePath.toString());
+            operarioRepository.save(operario);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar imagem de reconhecimento facial", e);
+        }
+    }
+
+    public boolean verificarRosto(Integer idOperario) {
+        Operario operario = operarioRepository.findById(idOperario)
+                .orElseThrow(() -> new EntityNotFoundException("Operário não encontrado"));
+
+        if (operario.getUrl() == null) {
+            throw new RuntimeException("Operário não possui imagem de reconhecimento cadastrada.");
+        }
+
+        return httpClientPython.chamarVerificacaoFacial(idOperario, operario.getUrl());
+    }
+
 }
