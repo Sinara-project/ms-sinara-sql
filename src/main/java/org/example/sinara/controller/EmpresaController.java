@@ -1,7 +1,7 @@
 package org.example.sinara.controller;
 
 import jakarta.validation.groups.Default;
-import org.example.sinara.dto.SenhaRequestDTO;
+import org.example.sinara.dto.request.SenhaRequestDTO;
 import org.example.sinara.dto.request.EmpresaRequestDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.open_api.EmpresaOpenApi;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/empresa")
+@RequestMapping("/api/admin/empresa")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class EmpresaController implements EmpresaOpenApi {
 
@@ -61,7 +61,6 @@ public class EmpresaController implements EmpresaOpenApi {
     @PatchMapping("/atualizar-senha-area-restrita/{id}")
     public ResponseEntity<EmpresaResponseDTO> atualizarSenhaAreaRestrita(@PathVariable Integer id,
                                                                          @RequestBody SenhaRequestDTO request) {
-        // passa apenas a senha para o service
         EmpresaResponseDTO atualizado = empresaService.atualizarSenhaAreaRestrita(id, request.getNovaSenha());
         return ResponseEntity.ok(atualizado);
     }
@@ -73,8 +72,17 @@ public class EmpresaController implements EmpresaOpenApi {
         return ResponseEntity.ok(perfil);
     }
 
+//    Métodos derevidos
     @GetMapping("/obter-id/{cnpj}")
     public String obterId(@PathVariable String cnpj) {
         return empresaService.obterIdEmpresaPorCnpj(cnpj);
     }
+
+//    fuction
+    @PostMapping("/rebaixar-planos")
+    public ResponseEntity<Void> rebaixarPlanos() {
+        empresaService.rebaixarPlanos();
+        return ResponseEntity.ok().build();
+    }
+
 }

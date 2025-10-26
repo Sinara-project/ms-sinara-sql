@@ -8,15 +8,17 @@ import org.example.sinara.open_api.CartaoCreditoOpenApi;
 import org.example.sinara.service.CartaoCreditoService;
 import org.example.sinara.validation.OnCreate;
 import org.example.sinara.validation.OnPatch;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/CartaoCredito")
+@RequestMapping("/api/user/CartaoCredito")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class CartaoCreditoController implements CartaoCreditoOpenApi {
 
@@ -55,5 +57,15 @@ public class CartaoCreditoController implements CartaoCreditoOpenApi {
             @Validated({OnPatch.class, Default.class}) @RequestBody CartaoCreditoRequestDTO dto) {
         cartaoCreditoService.atualizarCartaoCredito(id, dto);
         return ResponseEntity.status(HttpStatus.OK).body("Produto parcialmente atualizado com sucesso");
+    }
+
+//    Fuction
+    @GetMapping("/validar")
+    public ResponseEntity<Boolean> validarCartao(
+            @RequestParam String numero,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate validade) {
+
+        Boolean valido = cartaoCreditoService.validarCartao(numero, validade);
+        return ResponseEntity.ok(valido);
     }
 }

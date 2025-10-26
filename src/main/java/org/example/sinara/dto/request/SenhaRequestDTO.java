@@ -1,4 +1,4 @@
-package org.example.sinara.dto;
+package org.example.sinara.dto.request;
 
 import lombok.Data;
 

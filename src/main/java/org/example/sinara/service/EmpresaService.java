@@ -201,4 +201,10 @@ public class EmpresaService {
     public String obterIdEmpresaPorCnpj(String cnpj) {
         return empresaRepository.findIdByCnpj(cnpj);
     }
+
+//  fuction
+    public void rebaixarPlanos() {
+        empresaRepository.rebaixarPlanosPorInadimplencia();
+    }
+
 }

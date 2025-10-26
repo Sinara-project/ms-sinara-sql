@@ -6,10 +6,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.example.sinara.dto.SenhaRequestDTO;
+import org.example.sinara.dto.request.SenhaRequestDTO;
 import org.example.sinara.dto.request.EmpresaRequestDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
-import org.example.sinara.model.Empresa;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

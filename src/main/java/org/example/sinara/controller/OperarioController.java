@@ -11,12 +11,13 @@ import org.example.sinara.validation.OnPatch;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/operario")
+@RequestMapping("/api/user/operario")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class OperarioController implements OperarioOpenApi {
     private final OperarioService operarioService;
@@ -61,4 +62,20 @@ public class OperarioController implements OperarioOpenApi {
         Map<String, Object> perfil = operarioService.buscarPerfilOperarioPorId(id);
         return ResponseEntity.ok(perfil);
     }
+
+    //    Reconhecimento facial
+    @PostMapping("/uploadReconhecimento/{id}")
+    public ResponseEntity<String> uploadFotoReconhecimento(
+            @PathVariable Integer id,
+            @RequestParam("file") MultipartFile file) {
+        operarioService.atualizarFotoReconhecimento(id, file);
+        return ResponseEntity.ok("Imagem de reconhecimento facial salva com sucesso!");
+    }
+
+    @GetMapping("/verificarReconhecimento/{id}")
+    public ResponseEntity<Boolean> verificarReconhecimento(@PathVariable Integer id) {
+        boolean resultado = operarioService.verificarRosto(id);
+        return ResponseEntity.ok(resultado);
+    }
+
 }

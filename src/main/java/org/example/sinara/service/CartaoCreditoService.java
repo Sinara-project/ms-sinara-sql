@@ -12,6 +12,7 @@ import org.example.sinara.repository.sql.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -121,7 +122,9 @@ public class CartaoCreditoService {
         return toResponseDTO(atualizado);
     }
 
-
-
+//    Fuction
+    public Boolean validarCartao(String numero, LocalDate validade) {
+        return cartaoCreditoRepository.validarCartao(numero, validade);
+    }
 }
 
