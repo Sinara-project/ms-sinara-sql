@@ -12,6 +12,7 @@ import org.example.sinara.repository.sql.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -64,6 +65,7 @@ public class CartaoCreditoService {
         return dto;
     }
 
+//    Métodos comuns
     public CartaoCreditoResponseDTO listarPorId(Integer id) {
         CartaoCredito cartaoCredito = cartaoCreditoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cartão de crédito com ID " + id + " não encontrado"));
@@ -121,7 +123,9 @@ public class CartaoCreditoService {
         return toResponseDTO(atualizado);
     }
 
-
-
+//    Function
+    public Boolean validarCartao(String numero, LocalDate validade) {
+        return cartaoCreditoRepository.validarCartao(numero, validade);
+    }
 }
 

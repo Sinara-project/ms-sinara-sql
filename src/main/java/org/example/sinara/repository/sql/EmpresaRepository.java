@@ -33,12 +33,14 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
 //    Métodos derivados
     boolean existsByCodigo(String codigo);
 
+    boolean existsByCnpj(String cnpj);
+
     //Procedure
     @Procedure(name = "mudar_para_premium")
     void mudarParaPremium(@Param("p_id_empresa") Integer empresaId,
                           @Param("p_id_cartao") Integer cartaoId);
 
-    boolean existsByCnpj(String cnpj);
-
-
+//  Function
+    @Query(value = "SELECT rebaixar_planos_por_inadimplencia_fn()", nativeQuery = true)
+    void rebaixarPlanosPorInadimplencia();
 }

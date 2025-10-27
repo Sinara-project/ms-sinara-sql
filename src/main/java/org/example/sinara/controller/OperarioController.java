@@ -11,12 +11,13 @@ import org.example.sinara.validation.OnPatch;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/operario")
+@RequestMapping("/api/user/operario")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class OperarioController implements OperarioOpenApi {
     private final OperarioService operarioService;
@@ -25,7 +26,8 @@ public class OperarioController implements OperarioOpenApi {
         this.operarioService = operarioService;
     }
 
-    @GetMapping("/{id}")
+//    Métodos comuns
+    @GetMapping("buscarPorId/{id}")
     public ResponseEntity<OperarioResponseDTO> buscarOperarioPorId(@PathVariable Integer id) {
         OperarioResponseDTO operario = operarioService.buscarPorId(id);
         return ResponseEntity.ok(operario);
@@ -56,9 +58,33 @@ public class OperarioController implements OperarioOpenApi {
     }
 
     //    Query
-    @GetMapping("/perfil-operario/{id}")
+    @GetMapping("/perfilOperario/{id}")
     public ResponseEntity<Map<String, Object>> buscarPerfil(@PathVariable Integer id) {
         Map<String, Object> perfil = operarioService.buscarPerfilOperarioPorId(id);
         return ResponseEntity.ok(perfil);
     }
+
+//    Procedure
+    @PostMapping("/atualizar-status")
+    public String atualizarStatus(@RequestParam Integer idOperario,
+                                  @RequestParam Boolean ativo,
+                                  @RequestParam Boolean ferias) {
+        return operarioService.atualizarStatus(idOperario, ativo, ferias);
+    }
+
+    //    Reconhecimento facial
+    @PostMapping("/uploadReconhecimento/{id}")
+    public ResponseEntity<String> uploadFotoReconhecimento(
+            @PathVariable Integer id,
+            @RequestParam("file") MultipartFile file) {
+        operarioService.atualizarFotoReconhecimento(id, file);
+        return ResponseEntity.ok("Imagem de reconhecimento facial salva com sucesso!");
+    }
+
+    @GetMapping("/verificarReconhecimento/{id}")
+    public ResponseEntity<Boolean> verificarReconhecimento(@PathVariable Integer id) {
+        boolean resultado = operarioService.verificarRosto(id);
+        return ResponseEntity.ok(resultado);
+    }
+
 }

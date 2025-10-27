@@ -21,6 +21,9 @@ public interface OperarioRepository extends JpaRepository<Operario, Integer> {
 """, nativeQuery = true)
     Map<String, Object> buscarPerfilOperarioPorId(@Param("id") Integer id);
 
+    @Query("SELECT o.horasPrevistas FROM Operario o WHERE o.id = :idOperario")
+    Integer findHorasPrevistasByOperario(@Param("idOperario") Integer idOperario);
+
 //    Procedure
     @Procedure(procedureName = "atualizar_status_funcionario")
     void atualizarStatus(@Param("p_id_operario") Integer operarioId,
@@ -31,9 +34,4 @@ public interface OperarioRepository extends JpaRepository<Operario, Integer> {
     boolean existsByCpf(String cpf);
 
     boolean existsByEmail(String email);
-
-    @Query("SELECT o.horasPrevistas FROM Operario o WHERE o.id = :idOperario")
-    Integer findHorasPrevistasByOperario(@Param("idOperario") Integer idOperario);
-
-
 }

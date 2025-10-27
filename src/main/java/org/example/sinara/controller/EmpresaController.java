@@ -1,7 +1,7 @@
 package org.example.sinara.controller;
 
 import jakarta.validation.groups.Default;
-import org.example.sinara.dto.SenhaRequestDTO;
+import org.example.sinara.dto.request.SenhaRequestDTO;
 import org.example.sinara.dto.request.EmpresaRequestDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.open_api.EmpresaOpenApi;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/empresa")
+@RequestMapping("/api/admin/empresa")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class EmpresaController implements EmpresaOpenApi {
 
@@ -27,8 +27,7 @@ public class EmpresaController implements EmpresaOpenApi {
     }
 
     //    Métodos comuns
-
-    @GetMapping("/{id}")
+    @GetMapping("buscarPorId/{id}")
     public ResponseEntity<EmpresaResponseDTO> buscarEmpresaPorId(@PathVariable Integer id) {
         EmpresaResponseDTO empresa = empresaService.buscarPorId(id);
         return ResponseEntity.ok(empresa);
@@ -58,23 +57,37 @@ public class EmpresaController implements EmpresaOpenApi {
         return ResponseEntity.ok("Empresa atualizado com sucesso!");
     }
 
-    @PatchMapping("/atualizar-senha-area-restrita/{id}")
+    @PatchMapping("/atualizarSenhaAreaRestrita/{id}")
     public ResponseEntity<EmpresaResponseDTO> atualizarSenhaAreaRestrita(@PathVariable Integer id,
                                                                          @RequestBody SenhaRequestDTO request) {
-        // passa apenas a senha para o service
         EmpresaResponseDTO atualizado = empresaService.atualizarSenhaAreaRestrita(id, request.getNovaSenha());
         return ResponseEntity.ok(atualizado);
     }
 
 //    Query
-    @GetMapping("/perfil-empresa/{id}")
+    @GetMapping("/listarPerfilEmpresa/{id}")
     public ResponseEntity<Map<String, Object>> buscarPerfil(@PathVariable Integer id) {
         Map<String, Object> perfil = empresaService.buscarPerfilEmpresaPorId(id);
         return ResponseEntity.ok(perfil);
     }
 
-    @GetMapping("/obter-id/{cnpj}")
+//    Métodos derevidos
+    @GetMapping("/obterId/{cnpj}")
     public String obterId(@PathVariable String cnpj) {
         return empresaService.obterIdEmpresaPorCnpj(cnpj);
     }
+
+//    function
+    @PostMapping("/rebaixarPlanos")
+    public ResponseEntity<String> rebaixarPlanos() {
+        empresaService.rebaixarPlanos();
+        return ResponseEntity.ok("Planos rebaixados com sucesso!");
+    }
+
+//    Procedure
+    @PostMapping("/mudar-plano")
+    public String mudarParaPremium(@RequestParam Integer idEmpresa, @RequestParam Integer idCartao) {
+        return empresaService.mudarParaPremium(idEmpresa, idCartao);
+    }
+
 }

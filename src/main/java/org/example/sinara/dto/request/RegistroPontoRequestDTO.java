@@ -1,18 +1,14 @@
 package org.example.sinara.dto.request;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.example.sinara.validation.OnCreate;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-
+@Data
 public class RegistroPontoRequestDTO {
 
     @PastOrPresent(message = "O horário não pode ser no futuro")

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/pagamento")
+@RequestMapping("/api/admin/pagamento")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class PagamentoController implements PagamentoOpenApi {
     private final PagamentoService pagamentoService;
@@ -23,7 +23,8 @@ public class PagamentoController implements PagamentoOpenApi {
         this.pagamentoService = pagamentoService;
     }
 
-    @GetMapping("/{id}")
+//    Métodos comuns
+    @GetMapping("buscarPorId/{id}")
     public ResponseEntity<PagamentoResponseDTO> buscarPagamentoPorId(@PathVariable Integer id) {
         PagamentoResponseDTO pagamento = pagamentoService.buscarPorId(id);
         return ResponseEntity.ok(pagamento);

@@ -1,16 +1,13 @@
 package org.example.sinara.dto.request;
 
-import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 import org.example.sinara.validation.OnCreate;
-import org.hibernate.validator.constraints.br.CNPJ;
 
-import java.time.LocalDateTime;
-
-@Getter
-@Setter
-
+@Data
 public class EmpresaRequestDTO {
     @NotBlank(message = "CNPJ é obrigatório", groups = OnCreate.class)
 //    @CNPJ(message = "CNPJ inválido")
@@ -29,7 +26,6 @@ public class EmpresaRequestDTO {
     private String senha;
 
     @Size(min = 8, max = 255, message = "Senha da área restrita deve ter no mínimo 8 caracteres e no máximo 255 caracteres")
-    @NotBlank(message = "Senha da área restrita é obrigatória", groups = OnCreate.class)
     @Pattern(
             regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).*$",
             message = "Senha da área restrita deve conter pelo menos uma letra maiúscula, uma minúscula e um número"

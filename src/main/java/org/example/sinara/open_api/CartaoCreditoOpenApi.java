@@ -84,4 +84,19 @@ public interface CartaoCreditoOpenApi {
             CartaoCreditoRequestDTO dto
     );
 
+    @Operation(
+            summary = "Valida um cartão de crédito",
+            description = "Verifica se o cartão de crédito informado é válido com base no número e na data de validade."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Retorno indicando se o cartão é válido ou não"),
+            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos")
+    })
+    ResponseEntity<Boolean> validarCartao(
+            @Parameter(description = "Número do cartão de crédito", required = true)
+            String numero,
+            @Parameter(description = "Data de validade do cartão no formato ISO (yyyy-MM-dd)", required = true)
+            java.time.LocalDate validade
+    );
+
 }

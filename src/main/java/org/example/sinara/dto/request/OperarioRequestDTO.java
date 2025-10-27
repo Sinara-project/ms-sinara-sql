@@ -1,12 +1,10 @@
 package org.example.sinara.dto.request;
 
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.example.sinara.validation.OnCreate;
 
-@Getter
-@Setter
+@Data
 public class OperarioRequestDTO {
 
     @NotNull(message = "ID da empresa é obrigatório", groups = OnCreate.class)

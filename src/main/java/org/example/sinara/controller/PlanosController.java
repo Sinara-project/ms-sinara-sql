@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/planos")
+@RequestMapping("/api/admin/planos")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class PlanosController implements PlanosOpenApi {
     private final PlanosService planosService;
@@ -23,7 +23,8 @@ public class PlanosController implements PlanosOpenApi {
         this.planosService = planosService;
     }
 
-    @GetMapping("/{id}")
+//    Métodos comuns
+    @GetMapping("buscarPorId/{id}")
     public ResponseEntity<PlanosResponseDTO> buscarPlanosPorId(@PathVariable Integer id) {
         PlanosResponseDTO planos = planosService.buscarPorId(id);
         return ResponseEntity.ok(planos);
