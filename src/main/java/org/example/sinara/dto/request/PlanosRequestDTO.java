@@ -3,12 +3,10 @@ package org.example.sinara.dto.request;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.example.sinara.validation.OnCreate;
 
-@Getter
-@Setter
+@Data
 public class PlanosRequestDTO {
     @NotBlank(message = "Nome é obrigatório", groups = OnCreate.class)
     @Size(min = 2, max = 255, message = "O nome deve ter no minimo 2 caracteres e no máximo 255 caracteres")

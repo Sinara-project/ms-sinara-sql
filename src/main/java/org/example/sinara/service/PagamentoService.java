@@ -70,14 +70,13 @@ public class PagamentoService {
         return dto;
     }
 
-    //Métod0 buscar por id
+    //Métodos comuns
     public PagamentoResponseDTO buscarPorId(Integer id){
         Pagamento pagamento= pagamentoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
         return toResponseDTO(pagamento);
     }
 
-    //Métod0 listar
     public List<PagamentoResponseDTO> listarPagamento(){
         return pagamentoRepository.findAll()
                 .stream()
@@ -85,14 +84,12 @@ public class PagamentoService {
                 .toList();
     }
 
-    //Métod0 inserir
     public PagamentoResponseDTO inserirPagamento(PagamentoRequestDTO dto) {
         Pagamento pagamento = toEntity(dto);
         Pagamento salvo = pagamentoRepository.save(pagamento);
         return toResponseDTO(salvo);
     }
 
-    //Métod0 excluir
     public void excluirPagamento(Integer id) {
         if (!pagamentoRepository.existsById(id)) {
             throw new EntityNotFoundException("Pagamento com id " + id + " não encontrado");
@@ -100,7 +97,6 @@ public class PagamentoService {
         pagamentoRepository.deleteById(id);
     }
 
-    //Métod0 atualizar
     public PagamentoResponseDTO atualizarPagamento(Integer id, PagamentoRequestDTO dto) {
         Pagamento pagamento = pagamentoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pagamento com ID " + id + " não encontrado"));

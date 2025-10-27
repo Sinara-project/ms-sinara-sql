@@ -44,5 +44,4 @@ public interface RegistroPontoRepository extends JpaRepository<RegistroPonto, In
     AND YEAR(r.horarioEntrada) = YEAR(CURRENT_DATE)
 """)
     List<RegistroPonto> buscarRegistrosDoMesAtual(@Param("idOperario") Integer idOperario);
-
 }

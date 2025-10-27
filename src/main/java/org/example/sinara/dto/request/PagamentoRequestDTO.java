@@ -1,15 +1,13 @@
 package org.example.sinara.dto.request;
 
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.example.sinara.validation.OnCreate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 public class PagamentoRequestDTO {
     @NotNull(message = "O valor é obrigatório", groups = OnCreate.class)
     @DecimalMin(value = "0.01", message = "O valor deve ser maior que zero")

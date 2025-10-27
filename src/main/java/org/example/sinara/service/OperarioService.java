@@ -52,7 +52,7 @@ public class OperarioService {
 
         // Mapeia os atributos simples
         operario.setUrl(dto.getUrl());
-        operario.setImagemUrl(dto.getImagemUrl()); // Corrigido: campo no model é "imagemUrl"
+        operario.setImagemUrl(dto.getImagemUrl());
         operario.setCpf(dto.getCpf());
         operario.setNome(dto.getNome());
         operario.setEmail(dto.getEmail());
@@ -63,7 +63,6 @@ public class OperarioService {
         operario.setSenha(dto.getSenha());
         dto.setHorasPrevistas(operario.getHorasPrevistas());
 
-        // Associa empresa (FK)
         Empresa empresa = empresaRepository.findById(dto.getIdEmpresa())
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
         operario.setIdEmpresa(empresa);
@@ -91,14 +90,13 @@ public class OperarioService {
         return dto;
     }
 
-    //Métod0 buscar por id
+    //Métodos comuns
     public OperarioResponseDTO buscarPorId(Integer id){
         Operario operario= operarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Operário não encontrado"));
         return toResponseDTO(operario);
     }
 
-    //Métod0 listar
     public List<OperarioResponseDTO> listarOperario(){
         return operarioRepository.findAll()
                 .stream()
@@ -106,7 +104,6 @@ public class OperarioService {
                 .toList();
     }
 
-    //Métod0 inserir
     public OperarioResponseDTO inserirOperario(OperarioRequestDTO dto) {
         if (operarioRepository.existsByCpf(dto.getCpf())) {
             throw new CpfDuplicadoException(dto.getCpf());
@@ -120,7 +117,6 @@ public class OperarioService {
         return toResponseDTO(salvo);
     }
 
-    //Métod0 excluir
     public void excluirOperario(Integer id) {
         if (!operarioRepository.existsById(id)) {
             throw new EntityNotFoundException("Operário com id " + id + " não encontrado");
@@ -128,7 +124,6 @@ public class OperarioService {
         operarioRepository.deleteById(id);
     }
 
-    //Métod0 atualizar
     public OperarioResponseDTO atualizarOperario(Integer id, OperarioRequestDTO dto) {
         Operario operario = operarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Operário com ID " + id + " não encontrado"));
@@ -182,10 +177,20 @@ public class OperarioService {
         return perfil;
     }
 
-
     public int getHorasPrevistas(Integer idOperario) {
         Integer horas = operarioRepository.findHorasPrevistasByOperario(idOperario);
         return horas != null ? horas : 0;
+    }
+
+    //Procedure
+    @Transactional
+    public String atualizarStatus(Integer operarioId, Boolean ativo, Boolean ferias) {
+        try {
+            operarioRepository.atualizarStatus(operarioId, ativo, ferias);
+            return "Status do funcionário atualizado com sucesso!";
+        } catch (Exception e) {
+            return "Erro ao atualizar status do funcionário: " + e.getMessage();
+        }
     }
 
 //    Reconhecimento facil

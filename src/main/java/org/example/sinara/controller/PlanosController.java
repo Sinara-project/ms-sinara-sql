@@ -23,7 +23,8 @@ public class PlanosController implements PlanosOpenApi {
         this.planosService = planosService;
     }
 
-    @GetMapping("/{id}")
+//    Métodos comuns
+    @GetMapping("buscarPorId/{id}")
     public ResponseEntity<PlanosResponseDTO> buscarPlanosPorId(@PathVariable Integer id) {
         PlanosResponseDTO planos = planosService.buscarPorId(id);
         return ResponseEntity.ok(planos);

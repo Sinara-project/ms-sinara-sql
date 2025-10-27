@@ -31,14 +31,13 @@ public class PlanosService {
         return objectMapper.convertValue(planos, PlanosResponseDTO.class);
     }
 
-    //Métod0 buscar por id
+    //Métodos comuns
     public PlanosResponseDTO buscarPorId(Integer id){
         Planos planos= planosRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Plano não encontrado"));
         return toResponseDTO(planos);
     }
 
-    //Métod0 listar
     public List<PlanosResponseDTO> listarPlanos(){
         return planosRepository.findAll()
                 .stream()
@@ -46,7 +45,6 @@ public class PlanosService {
                 .toList();
     }
 
-    //Métod0 inserir
     public PlanosResponseDTO inserirPlanos(PlanosRequestDTO dto) {
         if (planosRepository.existsByNome(dto.getNome())) {
             throw new PlanoDuplicadoException(dto.getNome());
@@ -57,7 +55,6 @@ public class PlanosService {
         return toResponseDTO(salvo);
     }
 
-    //Métod0 excluir
     public void excluirPlanos(Integer id) {
         if (!planosRepository.existsById(id)) {
             throw new EntityNotFoundException("Planos com id " + id + " não encontrado");
@@ -65,7 +62,6 @@ public class PlanosService {
         planosRepository.deleteById(id);
     }
 
-    //Métod0 atualizar
     public PlanosResponseDTO atualizarPlanos(Integer id, PlanosRequestDTO dto) {
         Planos planos = planosRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Plano com ID " + id + " não encontrado"));

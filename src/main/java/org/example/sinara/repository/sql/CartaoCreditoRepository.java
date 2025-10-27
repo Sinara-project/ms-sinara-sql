@@ -11,7 +11,7 @@ public interface CartaoCreditoRepository extends JpaRepository<CartaoCredito, In
 //    Metodo derivado
     boolean existsByNumero(String numero);
 
-//    Fuction
+//    Function
     @Query(value = "SELECT validar_cartao_credito(:numero, :validade)", nativeQuery = true)
     Boolean validarCartao(@Param("numero") String numero, @Param("validade") LocalDate validade);
 }
