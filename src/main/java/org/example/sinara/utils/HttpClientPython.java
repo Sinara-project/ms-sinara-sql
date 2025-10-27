@@ -14,14 +14,13 @@ import java.util.Map;
 @Component
 public class HttpClientPython {
 
-    private final String baseUrl = "http://localhost:8000"; // Porta do Flask de reconhecimento facial
+    private final String baseUrl = "http://localhost:8000";
 
-    // Envia imagem para o Flask e retorna se o rosto bateu (True/False)
+    // envia imagem para o flask e retorna se o rosto bateu
     public boolean chamarVerificacaoFacial(Integer idOperario, String caminhoImagem) {
         try {
             RestTemplate restTemplate = new RestTemplate();
 
-            // Envia como multipart/form-data
             File file = new File(caminhoImagem);
             if (!file.exists()) {
                 throw new RuntimeException("Arquivo de imagem não encontrado: " + caminhoImagem);
@@ -29,7 +28,7 @@ public class HttpClientPython {
 
             FileSystemResource resource = new FileSystemResource(file);
 
-            // Monta o corpo multipart
+            // Monta o corpo
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
             body.add("user_id", idOperario.toString());
             body.add("foto_teste", resource);
@@ -46,7 +45,6 @@ public class HttpClientPython {
                     Map.class
             );
 
-            // Espera um JSON tipo {"resultado": true}
             Map<String, Object> responseBody = response.getBody();
             if (responseBody != null && responseBody.containsKey("resultado")) {
                 return (boolean) responseBody.get("resultado");

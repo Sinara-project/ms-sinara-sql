@@ -27,7 +27,8 @@ public class RegistroPontoController implements RegistroPontoOpenApi {
         this.registroPontoService = registroPontoService;
     }
 
-    @GetMapping("/{id}")
+//    Métodos comuns
+    @GetMapping("buscarPorId/{id}")
     public ResponseEntity<RegistroPontoResponseDTO> buscarRegistroPontoPorId(@PathVariable Integer id) {
         RegistroPontoResponseDTO registroPonto = registroPontoService.buscarPorId(id);
         return ResponseEntity.ok(registroPonto);
@@ -59,7 +60,7 @@ public class RegistroPontoController implements RegistroPontoOpenApi {
         return ResponseEntity.ok("Registro de ponto atualizado com sucesso!");
     }
 
-    @GetMapping("/horario-entrada-saida/{id}")
+    @GetMapping("/horarioEntradaSaida/{id}")
     public Map<String, String> buscarHorarios(@PathVariable Integer id) {
         Map<String, String> horarios = new HashMap<>();
         horarios.put("entrada", registroPontoService.buscarHorarioEntrada(id));
@@ -67,32 +68,32 @@ public class RegistroPontoController implements RegistroPontoOpenApi {
         return horarios;
     }
 
-    @GetMapping("/listar-status-operario/{idOperario}")
+    @GetMapping("/listarStatusOperario/{idOperario}")
     public ResponseEntity<Boolean> listarStatusOperario(@PathVariable Integer idOperario) {
         Boolean status = registroPontoService.status(idOperario);
         return ResponseEntity.ok(status);
     }
 
-    @GetMapping("/ultimo-turno/{idOperario}")
+    @GetMapping("/ultimoTurno/{idOperario}")
     public ResponseEntity<String> getUltimoTurno(@PathVariable Integer idOperario) {
         String turnoFormatado = registroPontoService.listarUltimoTurno(idOperario);
         return ResponseEntity.ok(turnoFormatado);
     }
 
-    @GetMapping("/quantidade-registro-ponto/{idOperario}")
+    @GetMapping("/quantidadeRegistroPonto/{idOperario}")
     public ResponseEntity<Integer> calcularPontosRegistrados(@PathVariable Integer idOperario) {
         int totalPontos = registroPontoService.calcularPontosRegistrados(idOperario);
         return ResponseEntity.ok(totalPontos);
     }
 
-    @GetMapping("/horas-trabalhadas/{idOperario}")
+    @GetMapping("/horasTrabalhadas/{idOperario}")
     public ResponseEntity<Map<String, String>> calcularHorasTrabalhadas(@PathVariable Integer idOperario) {
         String horasTrabalhadas = registroPontoService.calcularHorasTrabalhadasNoMes(idOperario);
         Map<String, String> resposta = Map.of("horasTrabalhadas", horasTrabalhadas);
         return ResponseEntity.ok(resposta);
     }
 
-    @GetMapping("/banco-horas/{idOperario}")
+    @GetMapping("/bancoHoras/{idOperario}")
     public ResponseEntity<Map<String, String>> getBancoHoras(@PathVariable Integer idOperario) {
         String bancoHoras = registroPontoService.calcularBancoHoras(idOperario);
         Map<String, String> resposta = Map.of("bancoHoras", bancoHoras);

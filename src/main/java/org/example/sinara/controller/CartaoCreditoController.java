@@ -28,7 +28,8 @@ public class CartaoCreditoController implements CartaoCreditoOpenApi {
         this.cartaoCreditoService = cartaoCreditoService;
     }
 
-    @GetMapping("/{id}")
+//    Métodos comuns
+    @GetMapping("buscarPorId/{id}")
     public ResponseEntity<CartaoCreditoResponseDTO> buscarCartaoCreditoPorId(@PathVariable Integer id) {
         CartaoCreditoResponseDTO cartaoCredito = cartaoCreditoService.listarPorId(id);
         return ResponseEntity.ok(cartaoCredito);
@@ -59,8 +60,8 @@ public class CartaoCreditoController implements CartaoCreditoOpenApi {
         return ResponseEntity.status(HttpStatus.OK).body("Produto parcialmente atualizado com sucesso");
     }
 
-//    Fuction
-    @GetMapping("/validar")
+//    Function
+    @GetMapping("/validarCartaoCredito")
     public ResponseEntity<Boolean> validarCartao(
             @RequestParam String numero,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate validade) {

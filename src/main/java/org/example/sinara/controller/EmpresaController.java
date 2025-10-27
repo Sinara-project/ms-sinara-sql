@@ -27,8 +27,7 @@ public class EmpresaController implements EmpresaOpenApi {
     }
 
     //    Métodos comuns
-
-    @GetMapping("/{id}")
+    @GetMapping("buscarPorId/{id}")
     public ResponseEntity<EmpresaResponseDTO> buscarEmpresaPorId(@PathVariable Integer id) {
         EmpresaResponseDTO empresa = empresaService.buscarPorId(id);
         return ResponseEntity.ok(empresa);
@@ -58,7 +57,7 @@ public class EmpresaController implements EmpresaOpenApi {
         return ResponseEntity.ok("Empresa atualizado com sucesso!");
     }
 
-    @PatchMapping("/atualizar-senha-area-restrita/{id}")
+    @PatchMapping("/atualizarSenhaAreaRestrita/{id}")
     public ResponseEntity<EmpresaResponseDTO> atualizarSenhaAreaRestrita(@PathVariable Integer id,
                                                                          @RequestBody SenhaRequestDTO request) {
         EmpresaResponseDTO atualizado = empresaService.atualizarSenhaAreaRestrita(id, request.getNovaSenha());
@@ -66,23 +65,29 @@ public class EmpresaController implements EmpresaOpenApi {
     }
 
 //    Query
-    @GetMapping("/perfil-empresa/{id}")
+    @GetMapping("/listarPerfilEmpresa/{id}")
     public ResponseEntity<Map<String, Object>> buscarPerfil(@PathVariable Integer id) {
         Map<String, Object> perfil = empresaService.buscarPerfilEmpresaPorId(id);
         return ResponseEntity.ok(perfil);
     }
 
 //    Métodos derevidos
-    @GetMapping("/obter-id/{cnpj}")
+    @GetMapping("/obterId/{cnpj}")
     public String obterId(@PathVariable String cnpj) {
         return empresaService.obterIdEmpresaPorCnpj(cnpj);
     }
 
-//    fuction
-    @PostMapping("/rebaixar-planos")
-    public ResponseEntity<Void> rebaixarPlanos() {
+//    function
+    @PostMapping("/rebaixarPlanos")
+    public ResponseEntity<String> rebaixarPlanos() {
         empresaService.rebaixarPlanos();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Planos rebaixados com sucesso!");
+    }
+
+//    Procedure
+    @PostMapping("/mudar-plano")
+    public String mudarParaPremium(@RequestParam Integer idEmpresa, @RequestParam Integer idCartao) {
+        return empresaService.mudarParaPremium(idEmpresa, idCartao);
     }
 
 }

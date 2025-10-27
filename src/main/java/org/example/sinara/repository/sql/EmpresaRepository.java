@@ -40,9 +40,7 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
     void mudarParaPremium(@Param("p_id_empresa") Integer empresaId,
                           @Param("p_id_cartao") Integer cartaoId);
 
-//  Fuction
-
+//  Function
     @Query(value = "SELECT rebaixar_planos_por_inadimplencia_fn()", nativeQuery = true)
     void rebaixarPlanosPorInadimplencia();
-
 }

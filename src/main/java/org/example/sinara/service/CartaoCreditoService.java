@@ -65,6 +65,7 @@ public class CartaoCreditoService {
         return dto;
     }
 
+//    Métodos comuns
     public CartaoCreditoResponseDTO listarPorId(Integer id) {
         CartaoCredito cartaoCredito = cartaoCreditoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cartão de crédito com ID " + id + " não encontrado"));
@@ -122,7 +123,7 @@ public class CartaoCreditoService {
         return toResponseDTO(atualizado);
     }
 
-//    Fuction
+//    Function
     public Boolean validarCartao(String numero, LocalDate validade) {
         return cartaoCreditoRepository.validarCartao(numero, validade);
     }

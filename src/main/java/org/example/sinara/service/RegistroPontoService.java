@@ -69,14 +69,13 @@ public class RegistroPontoService {
     }
 
 
-    //Métod0 buscar por id
+    //Métodos comuns
     public RegistroPontoResponseDTO buscarPorId(Integer id){
         RegistroPonto registroPonto= registroPontoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Registro de ponto não encontrado"));
         return toResponseDTO(registroPonto);
     }
 
-    //Métod0 listar
     public List<RegistroPontoResponseDTO> listarRegistroPonto(){
         return registroPontoRepository.findAll()
                 .stream()
@@ -84,7 +83,6 @@ public class RegistroPontoService {
                 .toList();
     }
 
-    //Métod0 inserir
     public RegistroPontoResponseDTO inserirRegistroPonto(RegistroPontoRequestDTO dto) {
         RegistroPonto registroPonto = toEntity(dto);
 
@@ -97,7 +95,7 @@ public class RegistroPontoService {
         RegistroPonto salvo = registroPontoRepository.save(registroPonto);
         return toResponseDTO(salvo);
     }
-    //Métod0 excluir
+
     public void excluirRegistroPonto(Integer id) {
         if (!registroPontoRepository.existsById(id)) {
             throw new EntityNotFoundException("Registro de ponto não encontrado");
@@ -105,7 +103,6 @@ public class RegistroPontoService {
         registroPontoRepository.deleteById(id);
     }
 
-    //Métod0 atualizar
     public RegistroPontoResponseDTO atualizarRegistroPonto(Integer id, RegistroPontoRequestDTO dto) {
         RegistroPonto registroPonto = registroPontoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Registro de ponto não encontrado"));

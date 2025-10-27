@@ -26,7 +26,8 @@ public class OperarioController implements OperarioOpenApi {
         this.operarioService = operarioService;
     }
 
-    @GetMapping("/{id}")
+//    Métodos comuns
+    @GetMapping("buscarPorId/{id}")
     public ResponseEntity<OperarioResponseDTO> buscarOperarioPorId(@PathVariable Integer id) {
         OperarioResponseDTO operario = operarioService.buscarPorId(id);
         return ResponseEntity.ok(operario);
@@ -57,10 +58,18 @@ public class OperarioController implements OperarioOpenApi {
     }
 
     //    Query
-    @GetMapping("/perfil-operario/{id}")
+    @GetMapping("/perfilOperario/{id}")
     public ResponseEntity<Map<String, Object>> buscarPerfil(@PathVariable Integer id) {
         Map<String, Object> perfil = operarioService.buscarPerfilOperarioPorId(id);
         return ResponseEntity.ok(perfil);
+    }
+
+//    Procedure
+    @PostMapping("/atualizar-status")
+    public String atualizarStatus(@RequestParam Integer idOperario,
+                                  @RequestParam Boolean ativo,
+                                  @RequestParam Boolean ferias) {
+        return operarioService.atualizarStatus(idOperario, ativo, ferias);
     }
 
     //    Reconhecimento facial

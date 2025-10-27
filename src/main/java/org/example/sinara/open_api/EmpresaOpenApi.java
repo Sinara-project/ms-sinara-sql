@@ -125,4 +125,16 @@ public interface EmpresaOpenApi {
             )
             SenhaRequestDTO request
     );
+
+    @Operation(
+            summary = "Rebaixa planos de empresas inadimplentes",
+            description = "Rebaixa os planos das empresas que estão inadimplentes."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Planos rebaixados com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro ao tentar rebaixar os planos")
+    })
+    ResponseEntity<String> rebaixarPlanos();
+
+
 }

@@ -1,19 +1,16 @@
 package org.example.sinara.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
-import org.example.sinara.dto.request.CartaoCreditoRequestDTO;
 import org.example.sinara.dto.request.EmpresaRequestDTO;
-import org.example.sinara.dto.response.CartaoCreditoResponseDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.exception.CnpjDuplicadoException;
-import org.example.sinara.model.CartaoCredito;
 import org.example.sinara.model.Empresa;
 import org.example.sinara.model.Planos;
 import org.example.sinara.repository.sql.EmpresaRepository;
 import org.example.sinara.repository.sql.PlanosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -69,15 +66,12 @@ public class EmpresaService {
     }
 
 //    Métodos comuns
-
-    //Metodo buscar por id
     public EmpresaResponseDTO buscarPorId(Integer id){
         Empresa empresa = empresaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Empresa com ID " + id + " não encontrada"));
         return toResponseDTO(empresa);
     }
 
-    //Metodo listar empresa
     public List<EmpresaResponseDTO> listarEmpresas(){
         return empresaRepository.findAll()
                 .stream()
@@ -85,7 +79,6 @@ public class EmpresaService {
                 .toList();
     }
 
-    //Metodo inserir empresa
     public EmpresaResponseDTO inserirEmpresa(EmpresaRequestDTO dto) {
         if (empresaRepository.existsByCnpj(dto.getCnpj())) {
             throw new CnpjDuplicadoException(dto.getCnpj());
@@ -103,7 +96,6 @@ public class EmpresaService {
         Empresa salvo = empresaRepository.save(empresa);
         return toResponseDTO(salvo);
     }
-
 
     private String gerarCodigoAleatorio() {
         String letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -136,8 +128,6 @@ public class EmpresaService {
         return resultadoFinal.toString();
     }
 
-
-    //Metodo excluir empresa
     public void excluirEmpresa(Integer id) {
         if (!empresaRepository.existsById(id)) {
             throw new EntityNotFoundException("Empresa com ID " + id + " não encontrado");
@@ -189,7 +179,6 @@ public class EmpresaService {
         return toResponseDTO(atualizado);
     }
 
-
     //  Query
     public Map<String, Object> buscarPerfilEmpresaPorId(Integer id) {
         Map<String, Object> perfil = empresaRepository.buscarPerfilPorId(id);
@@ -202,9 +191,23 @@ public class EmpresaService {
         return empresaRepository.findIdByCnpj(cnpj);
     }
 
-//  fuction
+//  function
     public void rebaixarPlanos() {
-        empresaRepository.rebaixarPlanosPorInadimplencia();
+        try {
+            empresaRepository.rebaixarPlanosPorInadimplencia();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao rebaixar planos: " + e.getMessage());
+        }
     }
 
+//    Procedure
+    @Transactional
+    public String mudarParaPremium(Integer empresaId, Integer cartaoId) {
+        try {
+            empresaRepository.mudarParaPremium(empresaId, cartaoId);
+            return "Empresa alterada para Premium com sucesso!";
+        } catch (Exception e) {
+            return "Erro ao mudar para Premium: " + e.getMessage();
+        }
+    }
 }
