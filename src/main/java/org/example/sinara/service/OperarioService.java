@@ -182,6 +182,10 @@ public class OperarioService {
         return horas != null ? horas : 0;
     }
 
+    public String obterIdOperarioPorCpf(String cpf) {
+        return operarioRepository.findIdByCpf(cpf);
+    }
+
     //Procedure
     @Transactional
     public String atualizarStatus(Integer operarioId, Boolean ativo, Boolean ferias) {
@@ -195,41 +199,32 @@ public class OperarioService {
 
 //    Reconhecimento facil
 
+    // envia foto pro Flask e salva URL no banco
     @Transactional
     public void atualizarFotoReconhecimento(Integer idOperario, MultipartFile file) {
         Operario operario = operarioRepository.findById(idOperario)
-                .orElseThrow(() -> new EntityNotFoundException("Operário não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Operário não encontrado."));
 
-        try {
-            // Garante que a pasta exista
-            Path dir = Paths.get(RECONHECIMENTO_DIR);
-            if (!Files.exists(dir)) {
-                Files.createDirectories(dir);
-            }
+        // Chama flask para upload no cloudinary
+        String imageUrl = httpClientPython.uploadImagem(file);
 
-            // Salva o arquivo localmente
-            String fileName = "operario_" + idOperario + "_" + LocalDateTime.now().toString().replace(":", "-") + ".jpg";
-            Path filePath = dir.resolve(fileName);
-            Files.write(filePath, file.getBytes());
-
-            // Atualiza no banco a URL local
-            operario.setUrl(filePath.toString());
-            operarioRepository.save(operario);
-
-        } catch (IOException e) {
-            throw new RuntimeException("Erro ao salvar imagem de reconhecimento facial", e);
-        }
+        // Salva url no banco
+        operario.setUrl(imageUrl);
+        operarioRepository.save(operario);
     }
 
+    // envia imagem atual pro Flask e compara
     public boolean verificarRosto(Integer idOperario) {
         Operario operario = operarioRepository.findById(idOperario)
-                .orElseThrow(() -> new EntityNotFoundException("Operário não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Operário não encontrado."));
 
-        if (operario.getUrl() == null) {
+        if (operario.getUrl() == null || operario.getUrl().isEmpty()) {
             throw new RuntimeException("Operário não possui imagem de reconhecimento cadastrada.");
         }
 
-        return httpClientPython.chamarVerificacaoFacial(idOperario, operario.getUrl());
-    }
+        // é passado o caminho da nova foto tirada
+        String caminhoImagem = "C:/imagens/operario_" + idOperario + ".jpg";
 
+        return httpClientPython.chamarVerificacaoFacial(idOperario, caminhoImagem);
+    }
 }

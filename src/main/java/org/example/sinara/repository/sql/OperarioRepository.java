@@ -12,9 +12,9 @@ public interface OperarioRepository extends JpaRepository<Operario, Integer> {
 //    Query
     @Query(value = """
     SELECT 
-        e.nome AS nome,
-        e.imagem_url AS imagemUrl,
-        e.horas_previstas AS horasPrevistas
+        o.nome AS nome,
+        o.imagem_url AS imagemUrl,
+        o.horas_previstas AS horasPrevistas
     FROM operario o
     JOIN empresa e ON o.id_empresa = e.id
     WHERE o.id = :id
@@ -24,7 +24,10 @@ public interface OperarioRepository extends JpaRepository<Operario, Integer> {
     @Query("SELECT o.horasPrevistas FROM Operario o WHERE o.id = :idOperario")
     Integer findHorasPrevistasByOperario(@Param("idOperario") Integer idOperario);
 
-//    Procedure
+    @Query("SELECT o.id FROM Operario o WHERE o.cpf = :cpf")
+    String findIdByCpf(@Param("cpf") String cpf);
+
+    //    Procedure
     @Procedure(procedureName = "atualizar_status_funcionario")
     void atualizarStatus(@Param("p_id_operario") Integer operarioId,
                          @Param("p_ativo") Boolean ativo,

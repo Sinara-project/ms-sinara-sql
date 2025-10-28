@@ -10,6 +10,7 @@ import org.example.sinara.dto.request.SenhaRequestDTO;
 import org.example.sinara.dto.request.EmpresaRequestDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -136,5 +137,18 @@ public interface EmpresaOpenApi {
     })
     ResponseEntity<String> rebaixarPlanos();
 
-
+    @Operation(
+            summary = "Atualiza o plano de uma empresa para Premium",
+            description = "Chama a procedure para atualizar o plano de uma empresa para Premium e registrar o pagamento."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Plano atualizado para Premium com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro ao atualizar o plano")
+    })
+    String mudarParaPremium(
+            @Parameter(description = "ID da empresa que terá o plano atualizado", required = true)
+            @RequestParam Integer idEmpresa,
+            @Parameter(description = "ID do cartão usado para pagamento", required = true)
+            @RequestParam Integer idCartao
+    );
 }
