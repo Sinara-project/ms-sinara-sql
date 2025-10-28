@@ -26,7 +26,7 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
     """, nativeQuery = true)
     Map<String, Object> buscarPerfilPorId(@Param("id") Integer id);
 
-    @Query("SELECT e.id FROM Empresa e WHERE e.cnpj = :cnpj")
+    @Query("SELECT e.id, e.codigo FROM Empresa e WHERE e.cnpj = :cnpj")
     String findIdByCnpj(@Param("cnpj") String cnpj);
 
 //    Métodos derivados
