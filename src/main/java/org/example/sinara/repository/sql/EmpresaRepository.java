@@ -20,8 +20,7 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
             e.nome AS nome,
             e.email AS email,
             e.ramo_atuacao AS ramoAtuacao,
-            e.telefone AS telefone,
-            e.plano_inicial AS planoInicial
+            e.telefone AS telefone
         FROM empresa e
         WHERE e.id = :id
     """, nativeQuery = true)
@@ -36,11 +35,11 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
     boolean existsByCnpj(String cnpj);
 
     //Procedure
-    @Procedure(name = "mudar_para_premium")
+    @Procedure(procedureName = "mudar_para_premium")
     void mudarParaPremium(@Param("p_id_empresa") Integer empresaId,
                           @Param("p_id_cartao") Integer cartaoId);
 
-//  Function
+    //  Function
     @Query(value = "SELECT rebaixar_planos_por_inadimplencia_fn()", nativeQuery = true)
     void rebaixarPlanosPorInadimplencia();
 }

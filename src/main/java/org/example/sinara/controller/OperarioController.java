@@ -64,6 +64,11 @@ public class OperarioController implements OperarioOpenApi {
         return ResponseEntity.ok(perfil);
     }
 
+    @GetMapping("/obterId/{cpf}")
+    public String obterId(@PathVariable String cpf) {
+        return operarioService.obterIdOperarioPorCpf(cpf);
+    }
+
 //    Procedure
     @PostMapping("/atualizar-status")
     public String atualizarStatus(@RequestParam Integer idOperario,

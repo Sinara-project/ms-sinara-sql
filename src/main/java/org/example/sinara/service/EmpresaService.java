@@ -205,7 +205,7 @@ public class EmpresaService {
     public String mudarParaPremium(Integer empresaId, Integer cartaoId) {
         try {
             empresaRepository.mudarParaPremium(empresaId, cartaoId);
-            return "Empresa alterada para Premium com sucesso!";
+            return "Plano da empresa alterado com sucesso!";
         } catch (Exception e) {
             return "Erro ao mudar para Premium: " + e.getMessage();
         }

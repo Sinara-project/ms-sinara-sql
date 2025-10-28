@@ -71,7 +71,6 @@ public class EmpresaController implements EmpresaOpenApi {
         return ResponseEntity.ok(perfil);
     }
 
-//    Métodos derevidos
     @GetMapping("/obterId/{cnpj}")
     public String obterId(@PathVariable String cnpj) {
         return empresaService.obterIdEmpresaPorCnpj(cnpj);
@@ -85,7 +84,7 @@ public class EmpresaController implements EmpresaOpenApi {
     }
 
 //    Procedure
-    @PostMapping("/mudar-plano")
+    @PostMapping("/mudarPlanoParaPremium")
     public String mudarParaPremium(@RequestParam Integer idEmpresa, @RequestParam Integer idCartao) {
         return empresaService.mudarParaPremium(idEmpresa, idCartao);
     }
