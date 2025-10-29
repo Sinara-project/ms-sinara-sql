@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.accessDeniedHandler(customAccessDeniedHandler))
-                .formLogin(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults())
                 .userDetailsService(customDetailsService);
 
         return http.build();
