@@ -127,6 +127,16 @@ public interface RegistroPontoOpenApi {
     );
 
     @Operation(
+            summary = "Retorna o total de pontos registrados por todos os operários de uma empresa",
+            description = "Retorna a soma de todos os registros de ponto (entradas e saídas) realizados por todos os operários vinculados à empresa informada."
+    )
+    @ApiResponse(responseCode = "200", description = "Quantidade de pontos retornada com sucesso")
+    ResponseEntity<Integer> contarTotalPontosPorEmpresa(
+            @Parameter(description = "ID da empresa", required = true)
+            Integer idEmpresa
+    );
+
+    @Operation(
             summary = "Calcula as horas trabalhadas no mês",
             description = "Retorna o total de horas trabalhadas pelo operário no mês atual."
     )

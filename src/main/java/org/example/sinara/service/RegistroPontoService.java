@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RegistroPontoService {
@@ -245,4 +246,7 @@ public class RegistroPontoService {
         return String.format("%02d:%02d", horas, minutosRestantes);
     }
 
+    public int contarTotalPontosPorEmpresa(Integer idEmpresa) {
+        return registroPontoRepository.contarTotalPontosPorEmpresa(idEmpresa);
+    }
 }

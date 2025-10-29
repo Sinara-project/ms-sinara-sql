@@ -207,7 +207,6 @@ public class OperarioService {
 
 //    Reconhecimento facil
 
-    // envia foto pro Flask e salva URL no banco
     @Transactional
     public void atualizarFotoReconhecimento(Integer idOperario, MultipartFile file) {
         Operario operario = operarioRepository.findById(idOperario)
@@ -221,8 +220,7 @@ public class OperarioService {
         operarioRepository.save(operario);
     }
 
-    // envia imagem atual pro Flask e compara
-    public boolean verificarRosto(Integer idOperario) {
+    public boolean verificarRosto(Integer idOperario, MultipartFile file) {
         Operario operario = operarioRepository.findById(idOperario)
                 .orElseThrow(() -> new RuntimeException("Operário não encontrado."));
 
@@ -230,9 +228,7 @@ public class OperarioService {
             throw new RuntimeException("Operário não possui imagem de reconhecimento cadastrada.");
         }
 
-        // é passado o caminho da nova foto tirada
-        String caminhoImagem = "C:/imagens/operario_" + idOperario + ".jpg";
-
-        return httpClientPython.chamarVerificacaoFacial(idOperario, caminhoImagem);
+        // passa a foto tirada diretamente
+        return httpClientPython.chamarVerificacaoFacial(idOperario, file);
     }
 }

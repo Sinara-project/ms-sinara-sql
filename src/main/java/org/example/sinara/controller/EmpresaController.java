@@ -70,7 +70,7 @@ public class EmpresaController implements EmpresaOpenApi {
         return ResponseEntity.ok(perfil);
     }
 
-    @GetMapping("/obterIdECodigo/{cnpj}")
+    @GetMapping("/obterEmpresaPorCnpj/{cnpj}")
     public ResponseEntity<Map<String, Object>> obterIdECodigo(@PathVariable String cnpj) {
         Map<String, Object> dados = empresaService.obterIdEmpresaPorCnpj(cnpj);
         return ResponseEntity.ok(dados);

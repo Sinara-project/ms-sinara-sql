@@ -43,8 +43,8 @@ public class HttpClientPython {
         }
     }
 
-    // 🔹 Envia imagem de verificação
-    public boolean chamarVerificacaoFacial(Integer idOperario, String caminhoImagem) {
+    // envia imagem de verificação
+    public boolean chamarVerificacaoFacial(Integer idOperario, MultipartFile file) {
         try {
             RestTemplate restTemplate = new RestTemplate();
 
@@ -54,7 +54,7 @@ public class HttpClientPython {
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
             body.add("user_id", idOperario.toString());
             body.add("foto_teste", new MultipartInputStreamFileResource(
-                    new java.io.FileInputStream(caminhoImagem), "foto_teste.jpg"
+                    file.getInputStream(), file.getOriginalFilename()
             ));
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
@@ -75,4 +75,5 @@ public class HttpClientPython {
             throw new RuntimeException("Erro ao chamar reconhecimento facial: " + e.getMessage(), e);
         }
     }
+
 }

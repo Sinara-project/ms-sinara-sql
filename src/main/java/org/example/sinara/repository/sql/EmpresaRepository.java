@@ -29,7 +29,12 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
     @Query(value = """
         SELECT 
             e.id AS id,
-            e.codigo AS codigo
+            e.imagem_url AS imagemUrl,
+            e.codigo AS codigo,
+            e.nome AS nome,
+            e.email AS email,
+            e.ramo_atuacao AS ramoAtuacao,
+            e.telefone AS telefone
         FROM empresa e
         WHERE e.cnpj = :cnpj
     """, nativeQuery = true)
