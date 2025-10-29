@@ -19,7 +19,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user/CartaoCredito")
-@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class CartaoCreditoController implements CartaoCreditoOpenApi {
 
     private final CartaoCreditoService cartaoCreditoService;
