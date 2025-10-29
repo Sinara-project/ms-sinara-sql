@@ -40,6 +40,7 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(ex -> ex.accessDeniedHandler(customAccessDeniedHandler))
                 .httpBasic(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults())
                 .userDetailsService(customDetailsService);
 
         return http.build();
