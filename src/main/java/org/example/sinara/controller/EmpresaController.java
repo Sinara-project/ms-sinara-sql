@@ -71,13 +71,13 @@ public class EmpresaController implements EmpresaOpenApi {
         return ResponseEntity.ok(perfil);
     }
 
-//    Métodos derevidos
-    @GetMapping("/obterId/{cnpj}")
-    public String obterId(@PathVariable String cnpj) {
-        return empresaService.obterIdEmpresaPorCnpj(cnpj);
+    @GetMapping("/obterIdECodigo/{cnpj}")
+    public ResponseEntity<Map<String, Object>> obterIdECodigo(@PathVariable String cnpj) {
+        Map<String, Object> dados = empresaService.obterIdEmpresaPorCnpj(cnpj);
+        return ResponseEntity.ok(dados);
     }
 
-//    function
+    //    function
     @PostMapping("/rebaixarPlanos")
     public ResponseEntity<String> rebaixarPlanos() {
         empresaService.rebaixarPlanos();
@@ -85,7 +85,7 @@ public class EmpresaController implements EmpresaOpenApi {
     }
 
 //    Procedure
-    @PostMapping("/mudar-plano")
+    @PostMapping("/mudarPlanoParaPremium")
     public String mudarParaPremium(@RequestParam Integer idEmpresa, @RequestParam Integer idCartao) {
         return empresaService.mudarParaPremium(idEmpresa, idCartao);
     }

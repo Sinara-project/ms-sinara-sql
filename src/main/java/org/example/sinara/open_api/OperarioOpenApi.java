@@ -84,26 +84,6 @@ public interface OperarioOpenApi {
             OperarioRequestDTO dto
     );
 
-//    @Operation(
-//            summary = "Lista todas os nomes dos operários",
-//            description = "Retorna um objeto contendo todos os nomes cadastrados na tabela operário."
-//    )
-//    @ApiResponse(responseCode = "200", description = "Objeto retornado com sucesso")
-//    Operario buscarPorNome(
-//            @Parameter(description = "Nome do operário", required = true)
-//            String nome
-//    );
-//
-//    @Operation(
-//            summary = "Lista todas os pontos registrados dos operários",
-//            description = "Retorna um objeto contendo todas os pontos registrados cadastrados na tabela operário."
-//    )
-//    @ApiResponse(responseCode = "200", description = "Objeto retornado com sucesso")
-//    Operario buscarPorPontosRegistrados(
-//            @Parameter(description = "id do operário", required = true)
-//            Integer id
-//    );
-
     @Operation(
             summary = "Busca o perfil do operário",
             description = "Retorna todas as informações necessárias para a tela de perfil de um operário, com base no ID informado."
@@ -113,4 +93,45 @@ public interface OperarioOpenApi {
             @Parameter(description = "ID do operário", required = true)
             Integer id
     );
+
+    @Operation(
+            summary = "Lista todos os operários de uma empresa",
+            description = "Retorna todos os operários vinculados a uma empresa específica, com base no ID da empresa informado."
+    )
+    @ApiResponse(responseCode = "200", description = "Lista de operários retornada com sucesso")
+    ResponseEntity<List<Map<String, Object>>> listarOperariosPorEmpresa(
+            @Parameter(description = "ID da empresa", required = true)
+            Integer idEmpresa
+    );
+
+    @Operation(
+            summary = "Atualiza o status do operário",
+            description = "Atualiza os campos de status de um operário (ativo e férias) com base no ID informado."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Status do operário atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Operário não encontrado")
+    })
+    String atualizarStatus(
+            @Parameter(description = "ID do operário a ser atualizado", required = true)
+            Integer idOperario,
+            @Parameter(description = "Define se o operário está ativo", required = true)
+            Boolean ativo,
+            @Parameter(description = "Define se o operário está de férias", required = true)
+            Boolean ferias
+    );
+
+    @Operation(
+            summary = "Obtém o ID do operário pelo CPF",
+            description = "Retorna o ID de um operário com base no CPF informado na URL."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "ID encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Operário não encontrado para o CPF informado")
+    })
+    String obterId(
+            @Parameter(description = "CPF do operário a ser buscado", required = true)
+            String cpf
+    );
+
 }
