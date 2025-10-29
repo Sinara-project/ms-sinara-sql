@@ -44,4 +44,11 @@ public interface RegistroPontoRepository extends JpaRepository<RegistroPonto, In
     AND YEAR(r.horarioEntrada) = YEAR(CURRENT_DATE)
 """)
     List<RegistroPonto> buscarRegistrosDoMesAtual(@Param("idOperario") Integer idOperario);
+
+    @Query("""
+    SELECT (COUNT(r.horarioEntrada) + COUNT(r.horarioSaida))
+    FROM RegistroPonto r
+    WHERE r.empresa.id = :idEmpresa
+""")
+    int contarTotalPontosPorEmpresa(@Param("idEmpresa") Integer idEmpresa);
 }

@@ -45,6 +45,7 @@ public interface OperarioRepository extends JpaRepository<Operario, Integer> {
     List<Map<String, Object>> buscarOperariosPorIdEmpresa(@Param("idEmpresa") Integer idEmpresa);
 
 
+
     //    Procedure
     @Procedure(procedureName = "atualizar_status_funcionario")
     void atualizarStatus(@Param("p_id_operario") Integer operarioId,

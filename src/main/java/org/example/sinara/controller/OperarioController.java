@@ -91,9 +91,11 @@ public class OperarioController implements OperarioOpenApi {
         return ResponseEntity.ok("Imagem de reconhecimento facial salva com sucesso!");
     }
 
-    @GetMapping("/verificarReconhecimento/{id}")
-    public ResponseEntity<Boolean> verificarReconhecimento(@PathVariable Integer id) {
-        boolean resultado = operarioService.verificarRosto(id);
+    @PostMapping("/verificarReconhecimento/{id}")
+    public ResponseEntity<Boolean> verificarReconhecimento(
+            @PathVariable Integer id,
+            @RequestParam("file") MultipartFile file) {
+        boolean resultado = operarioService.verificarRosto(id, file);
         return ResponseEntity.ok(resultado);
     }
 

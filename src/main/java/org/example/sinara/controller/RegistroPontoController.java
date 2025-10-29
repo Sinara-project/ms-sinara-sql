@@ -85,6 +85,12 @@ public class RegistroPontoController implements RegistroPontoOpenApi {
         return ResponseEntity.ok(totalPontos);
     }
 
+    @GetMapping("/quantidadePontosPoridEmpresa/{idEmpresa}")
+    public ResponseEntity<Integer> contarTotalPontosPorEmpresa(@PathVariable Integer idEmpresa) {
+        int total = registroPontoService.contarTotalPontosPorEmpresa(idEmpresa);
+        return ResponseEntity.ok(total);
+    }
+
     @GetMapping("/horasTrabalhadas/{idOperario}")
     public ResponseEntity<Map<String, String>> calcularHorasTrabalhadas(@PathVariable Integer idOperario) {
         String horasTrabalhadas = registroPontoService.calcularHorasTrabalhadasNoMes(idOperario);
