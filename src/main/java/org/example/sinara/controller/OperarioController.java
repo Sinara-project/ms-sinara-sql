@@ -18,7 +18,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user/operario")
-@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class OperarioController implements OperarioOpenApi {
     private final OperarioService operarioService;
 

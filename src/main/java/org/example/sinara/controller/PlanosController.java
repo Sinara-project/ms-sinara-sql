@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/planos")
-@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class PlanosController implements PlanosOpenApi {
     private final PlanosService planosService;
 
