@@ -187,11 +187,16 @@ public class EmpresaService {
         }
         return perfil;
     }
-    public String obterIdEmpresaPorCnpj(String cnpj) {
-        return empresaRepository.findIdByCnpj(cnpj);
+
+    public Map<String, Object> obterIdEmpresaPorCnpj(String cnpj) {
+        Map<String, Object> dados = empresaRepository.findIdByCnpj(cnpj);
+        if (dados == null || dados.isEmpty()) {
+            throw new EntityNotFoundException("Empresa com CNPJ " + cnpj + " não encontrada");
+        }
+        return dados;
     }
 
-//  function
+    //  function
     public void rebaixarPlanos() {
         try {
             empresaRepository.rebaixarPlanosPorInadimplencia();

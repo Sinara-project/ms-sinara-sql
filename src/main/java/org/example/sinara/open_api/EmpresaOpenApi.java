@@ -101,7 +101,7 @@ public interface EmpresaOpenApi {
             description = "Retorna ID da empresa, com base no CNPJ informado"
     )
     @ApiResponse(responseCode = "200", description = "Informações retornadas com sucesso")
-    String obterId(
+    ResponseEntity<Map<String, Object>> obterIdECodigo(
             @Parameter(description = "CNPJ da empresa", required = true)
             String cnpj
     );
