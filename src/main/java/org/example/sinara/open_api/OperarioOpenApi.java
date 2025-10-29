@@ -95,6 +95,16 @@ public interface OperarioOpenApi {
     );
 
     @Operation(
+            summary = "Lista todos os operários de uma empresa",
+            description = "Retorna todos os operários vinculados a uma empresa específica, com base no ID da empresa informado."
+    )
+    @ApiResponse(responseCode = "200", description = "Lista de operários retornada com sucesso")
+    ResponseEntity<List<Map<String, Object>>> listarOperariosPorEmpresa(
+            @Parameter(description = "ID da empresa", required = true)
+            Integer idEmpresa
+    );
+
+    @Operation(
             summary = "Atualiza o status do operário",
             description = "Atualiza os campos de status de um operário (ativo e férias) com base no ID informado."
     )

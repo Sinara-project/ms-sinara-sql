@@ -186,6 +186,14 @@ public class OperarioService {
         return operarioRepository.findIdByCpf(cpf);
     }
 
+    public List<Map<String, Object>> buscarOperariosPorIdEmpresa(Integer idEmpresa) {
+        List<Map<String, Object>> operarios = operarioRepository.buscarOperariosPorIdEmpresa(idEmpresa);
+        if (operarios == null || operarios.isEmpty()) {
+            throw new EntityNotFoundException("Nenhum operário encontrado para a empresa com ID " + idEmpresa);
+        }
+        return operarios;
+    }
+
     //Procedure
     @Transactional
     public String atualizarStatus(Integer operarioId, Boolean ativo, Boolean ferias) {

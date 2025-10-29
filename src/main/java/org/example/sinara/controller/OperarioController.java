@@ -69,7 +69,13 @@ public class OperarioController implements OperarioOpenApi {
         return operarioService.obterIdOperarioPorCpf(cpf);
     }
 
-//    Procedure
+    @GetMapping("/listarOperariosPorIdEmpresa/{idEmpresa}")
+    public ResponseEntity<List<Map<String, Object>>> listarOperariosPorEmpresa(@PathVariable Integer idEmpresa) {
+        List<Map<String, Object>> operarios = operarioService.buscarOperariosPorIdEmpresa(idEmpresa);
+        return ResponseEntity.ok(operarios);
+    }
+
+    //    Procedure
     @PostMapping("/atualizar-status")
     public String atualizarStatus(@RequestParam Integer idOperario,
                                   @RequestParam Boolean ativo,
