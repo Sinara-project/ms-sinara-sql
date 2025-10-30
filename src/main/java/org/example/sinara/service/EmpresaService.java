@@ -99,6 +99,9 @@ public class EmpresaService {
         empresa.setCodigo(codigoGerado);
         empresa.setSenha(passwordEncoder.encode(dto.getSenha()));
 
+        empresa.setCodigo(codigoGerado);
+        empresa.setSenhaAreaRestrita(passwordEncoder.encode(dto.getSenhaAreaRestrita()));
+
         Empresa salvo = empresaRepository.save(empresa);
         return toResponseDTO(salvo);
     }
@@ -152,10 +155,10 @@ public class EmpresaService {
             empresa.setNome(dto.getNome());
         }
         if (dto.getSenha() != null) {
-            empresa.setSenha(dto.getSenha());
+            empresa.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
         if (dto.getSenhaAreaRestrita() != null) {
-            empresa.setSenhaAreaRestrita(dto.getSenhaAreaRestrita());
+            empresa.setSenhaAreaRestrita(passwordEncoder.encode(dto.getSenhaAreaRestrita()));
         }
         if (dto.getImagemUrl() != null) {
             empresa.setImagemUrl(dto.getImagemUrl());

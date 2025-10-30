@@ -10,7 +10,6 @@ import org.example.sinara.validation.OnCreate;
 @Data
 public class EmpresaRequestDTO {
     @NotBlank(message = "CNPJ é obrigatório", groups = OnCreate.class)
-//    @CNPJ(message = "CNPJ inválido")
     private String cnpj;
 
     @NotBlank(message = "Nome é obrigatório", groups = OnCreate.class)
