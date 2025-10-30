@@ -13,6 +13,7 @@ import org.example.sinara.repository.sql.EmpresaRepository;
 import org.example.sinara.repository.sql.OperarioRepository;
 import org.example.sinara.utils.HttpClientPython;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,26 +34,27 @@ public class OperarioService {
     private ObjectMapper objectMapper;
     private static final String RECONHECIMENTO_DIR = "uploads/reconhecimento";
     private final HttpClientPython httpClientPython;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public OperarioService(
             OperarioRepository operarioRepository,
             EmpresaRepository empresaRepository,
             ObjectMapper objectMapper,
-            HttpClientPython httpClientPython
+            HttpClientPython httpClientPython,
+            PasswordEncoder passwordEncoder
     ) {
         this.operarioRepository = operarioRepository;
         this.empresaRepository = empresaRepository;
         this.objectMapper = objectMapper;
         this.httpClientPython = httpClientPython;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
     private Operario toEntity(OperarioRequestDTO dto) {
         Operario operario = new Operario();
 
-        // Mapeia os atributos simples
-        operario.setUrl(dto.getUrl());
         operario.setImagemUrl(dto.getImagemUrl());
         operario.setCpf(dto.getCpf());
         operario.setNome(dto.getNome());
@@ -75,7 +77,6 @@ public class OperarioService {
         OperarioResponseDTO dto = new OperarioResponseDTO();
 
         dto.setId(operario.getId());
-        dto.setUrl(operario.getUrl());
         dto.setImagemUrl(operario.getImagemUrl());
         dto.setCpf(operario.getCpf());
         dto.setNome(operario.getNome());
@@ -114,6 +115,7 @@ public class OperarioService {
         }
 
         Operario operario = toEntity(dto);
+        operario.setSenha(passwordEncoder.encode(dto.getSenha()));
         Operario salvo = operarioRepository.save(operario);
         return toResponseDTO(salvo);
     }
@@ -129,9 +131,6 @@ public class OperarioService {
         Operario operario = operarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Operário com ID " + id + " não encontrado"));
 
-        if (dto.getUrl() != null) {
-            operario.setUrl(dto.getUrl());
-        }
         if (dto.getImagemUrl() != null) {
             operario.setImagemUrl(dto.getImagemUrl());
         }
@@ -197,11 +196,11 @@ public class OperarioService {
 
     public boolean validarLogin(OperarioLoginRequestDTO loginDTO) {
         return operarioRepository.findByLogin(
-                loginDTO.getEmail(),
-                loginDTO.getCpf(),
-                loginDTO.getSenha(),
-                loginDTO.getCodigoEmpresa()
-        ).isPresent();
+                        loginDTO.getEmail(),
+                        loginDTO.getCpf(),
+                        loginDTO.getCodigoEmpresa()
+                ).map(operario -> passwordEncoder.matches(loginDTO.getSenha(), operario.getSenha()))
+                .orElse(false);
     }
 
     //Procedure
@@ -226,7 +225,7 @@ public class OperarioService {
         String imageUrl = httpClientPython.uploadImagem(file);
 
         // Salva url no banco
-        operario.setUrl(imageUrl);
+        operario.setImagemUrl(imageUrl);
         operarioRepository.save(operario);
     }
 
@@ -234,7 +233,7 @@ public class OperarioService {
         Operario operario = operarioRepository.findById(idOperario)
                 .orElseThrow(() -> new RuntimeException("Operário não encontrado."));
 
-        if (operario.getUrl() == null || operario.getUrl().isEmpty()) {
+        if (operario.getImagemUrl() == null || operario.getImagemUrl().isEmpty()) {
             throw new RuntimeException("Operário não possui imagem de reconhecimento cadastrada.");
         }
 

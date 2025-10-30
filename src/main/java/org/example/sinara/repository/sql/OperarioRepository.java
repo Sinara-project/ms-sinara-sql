@@ -45,17 +45,18 @@ public interface OperarioRepository extends JpaRepository<Operario, Integer> {
 """, nativeQuery = true)
     List<Map<String, Object>> buscarOperariosPorIdEmpresa(@Param("idEmpresa") Integer idEmpresa);
 
-    @Query("SELECT o FROM Operario o " +
-            "JOIN o.idEmpresa e " +
-            "WHERE o.email = :email " +
-            "AND o.cpf = :cpf " +
-            "AND o.senha = :senha " +
-            "AND e.codigo = :codigoEmpresa")
+    @Query("""
+    SELECT o FROM Operario o
+    JOIN o.idEmpresa e
+    WHERE (o.email = :email OR o.cpf = :cpf)
+    AND e.codigo = :codigoEmpresa
+    """)
     Optional<Operario> findByLogin(
             @Param("email") String email,
             @Param("cpf") String cpf,
-            @Param("senha") String senha,
-            @Param("codigoEmpresa") String codigoEmpresa);
+            @Param("codigoEmpresa") String codigoEmpresa
+    );
+
 
     //    Procedure
     @Procedure(procedureName = "atualizar_status_funcionario")

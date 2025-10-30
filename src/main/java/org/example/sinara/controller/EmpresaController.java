@@ -1,6 +1,8 @@
 package org.example.sinara.controller;
 
 import jakarta.validation.groups.Default;
+import org.example.sinara.dto.request.EmpresaLoginRequestDTO;
+import org.example.sinara.dto.request.OperarioLoginRequestDTO;
 import org.example.sinara.dto.request.SenhaRequestDTO;
 import org.example.sinara.dto.request.EmpresaRequestDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
@@ -74,6 +76,12 @@ public class EmpresaController implements EmpresaOpenApi {
     public ResponseEntity<Map<String, Object>> obterIdECodigo(@PathVariable String cnpj) {
         Map<String, Object> dados = empresaService.obterIdEmpresaPorCnpj(cnpj);
         return ResponseEntity.ok(dados);
+    }
+
+    @PostMapping("/loginEmpresa")
+    public ResponseEntity<Boolean> login(@RequestBody EmpresaLoginRequestDTO loginDTO) {
+        boolean valido = empresaService.validarLogin(loginDTO.getCnpj(), loginDTO.getSenha());
+        return ResponseEntity.ok(valido);
     }
 
     //    function

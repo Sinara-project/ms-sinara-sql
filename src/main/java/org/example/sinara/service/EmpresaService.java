@@ -2,6 +2,7 @@ package org.example.sinara.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.example.sinara.dto.request.EmpresaRequestDTO;
+import org.example.sinara.dto.request.OperarioLoginRequestDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.exception.CnpjDuplicadoException;
 import org.example.sinara.model.Empresa;
@@ -9,6 +10,7 @@ import org.example.sinara.model.Planos;
 import org.example.sinara.repository.sql.EmpresaRepository;
 import org.example.sinara.repository.sql.PlanosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,14 +20,17 @@ import java.util.*;
 public class EmpresaService {
     private final EmpresaRepository empresaRepository;
     private final PlanosRepository planosRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public EmpresaService(
             EmpresaRepository empresaRepository,
-            PlanosRepository planosRepository
+            PlanosRepository planosRepository,
+            PasswordEncoder passwordEncoder
     ) {
         this.empresaRepository = empresaRepository;
         this.planosRepository = planosRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     private Empresa toEntity(EmpresaRequestDTO dto) {
@@ -89,9 +94,10 @@ public class EmpresaService {
         String codigoGerado;
         do {
             codigoGerado = gerarCodigoAleatorio();
-        } while (empresaRepository.existsByCodigo(codigoGerado)); // evita duplicados
+        } while (empresaRepository.existsByCodigo(codigoGerado));
 
         empresa.setCodigo(codigoGerado);
+        empresa.setSenha(passwordEncoder.encode(dto.getSenha()));
 
         Empresa salvo = empresaRepository.save(empresa);
         return toResponseDTO(salvo);
@@ -172,8 +178,8 @@ public class EmpresaService {
         Empresa empresa = empresaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Empresa com ID " + id + " não encontrada"));
 
-        // atualizar a senha da área restrita
-        empresa.setSenhaAreaRestrita(novaSenha);
+        String senhaCriptografada = passwordEncoder.encode(novaSenha);
+        empresa.setSenhaAreaRestrita(senhaCriptografada);
 
         Empresa atualizado = empresaRepository.save(empresa);
         return toResponseDTO(atualizado);
@@ -194,6 +200,12 @@ public class EmpresaService {
             throw new EntityNotFoundException("Empresa com CNPJ " + cnpj + " não encontrada");
         }
         return dados;
+    }
+
+    public boolean validarLogin(String cnpj, String senhaDigitada) {
+        return empresaRepository.findByCnpj(cnpj)
+                .map(empresa -> passwordEncoder.matches(senhaDigitada, empresa.getSenha()))
+                .orElse(false);
     }
 
     //  function
