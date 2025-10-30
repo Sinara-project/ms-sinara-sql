@@ -134,4 +134,21 @@ public interface OperarioOpenApi {
             String cpf
     );
 
+    @Operation(
+            summary = "Realiza o login do operário",
+            description = "Valida as credenciais informadas (email, CPF, senha e código da empresa) e retorna true se o login for válido, ou false caso contrário."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Login verificado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+    })
+    ResponseEntity<Boolean> loginOperario(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Dados de login do operário",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = org.example.sinara.dto.request.OperarioLoginRequestDTO.class))
+            )
+            org.example.sinara.dto.request.OperarioLoginRequestDTO loginDTO
+    );
+
 }

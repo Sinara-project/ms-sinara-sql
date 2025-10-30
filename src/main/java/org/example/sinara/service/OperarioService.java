@@ -2,6 +2,7 @@ package org.example.sinara.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
+import org.example.sinara.dto.request.OperarioLoginRequestDTO;
 import org.example.sinara.dto.request.OperarioRequestDTO;
 import org.example.sinara.dto.response.OperarioResponseDTO;
 import org.example.sinara.exception.CpfDuplicadoException;
@@ -61,7 +62,7 @@ public class OperarioService {
         operario.setFerias(dto.getFerias());
         operario.setAtivo(dto.getAtivo());
         operario.setSenha(dto.getSenha());
-        dto.setHorasPrevistas(operario.getHorasPrevistas());
+        operario.setHorasPrevistas(dto.getHorasPrevistas());
 
         Empresa empresa = empresaRepository.findById(dto.getIdEmpresa())
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
@@ -85,7 +86,7 @@ public class OperarioService {
         dto.setAtivo(operario.getAtivo());
         dto.setSenha(operario.getSenha());
         dto.setHorasPrevistas(operario.getHorasPrevistas());
-        dto.setIdEmpresa(operario.getIdEmpresa().getId()); // pega só o ID da empresa
+        dto.setIdEmpresa(operario.getIdEmpresa().getId());
 
         return dto;
     }
@@ -192,6 +193,15 @@ public class OperarioService {
             throw new EntityNotFoundException("Nenhum operário encontrado para a empresa com ID " + idEmpresa);
         }
         return operarios;
+    }
+
+    public boolean validarLogin(OperarioLoginRequestDTO loginDTO) {
+        return operarioRepository.findByLogin(
+                loginDTO.getEmail(),
+                loginDTO.getCpf(),
+                loginDTO.getSenha(),
+                loginDTO.getCodigoEmpresa()
+        ).isPresent();
     }
 
     //Procedure

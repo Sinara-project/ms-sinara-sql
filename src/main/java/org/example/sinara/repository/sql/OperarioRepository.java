@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface OperarioRepository extends JpaRepository<Operario, Integer> {
 //    Query
@@ -44,7 +45,17 @@ public interface OperarioRepository extends JpaRepository<Operario, Integer> {
 """, nativeQuery = true)
     List<Map<String, Object>> buscarOperariosPorIdEmpresa(@Param("idEmpresa") Integer idEmpresa);
 
-
+    @Query("SELECT o FROM Operario o " +
+            "JOIN o.idEmpresa e " +
+            "WHERE o.email = :email " +
+            "AND o.cpf = :cpf " +
+            "AND o.senha = :senha " +
+            "AND e.codigo = :codigoEmpresa")
+    Optional<Operario> findByLogin(
+            @Param("email") String email,
+            @Param("cpf") String cpf,
+            @Param("senha") String senha,
+            @Param("codigoEmpresa") String codigoEmpresa);
 
     //    Procedure
     @Procedure(procedureName = "atualizar_status_funcionario")
