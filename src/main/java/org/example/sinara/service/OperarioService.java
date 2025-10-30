@@ -156,7 +156,7 @@ public class OperarioService {
             operario.setAtivo(dto.getAtivo());
         }
         if (dto.getSenha() != null) {
-            operario.setSenha(dto.getSenha());
+            operario.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
         if (dto.getHorasPrevistas() != null) {
             operario.setHorasPrevistas(dto.getHorasPrevistas());
