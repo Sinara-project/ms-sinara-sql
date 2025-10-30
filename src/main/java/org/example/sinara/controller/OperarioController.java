@@ -1,6 +1,7 @@
 package org.example.sinara.controller;
 
 import jakarta.validation.groups.Default;
+import org.example.sinara.dto.request.OperarioLoginRequestDTO;
 import org.example.sinara.dto.request.OperarioRequestDTO;
 import org.example.sinara.dto.response.OperarioResponseDTO;
 import org.example.sinara.model.Operario;
@@ -72,6 +73,12 @@ public class OperarioController implements OperarioOpenApi {
     public ResponseEntity<List<Map<String, Object>>> listarOperariosPorEmpresa(@PathVariable Integer idEmpresa) {
         List<Map<String, Object>> operarios = operarioService.buscarOperariosPorIdEmpresa(idEmpresa);
         return ResponseEntity.ok(operarios);
+    }
+
+    @PostMapping("/loginOperario")
+    public ResponseEntity<Boolean> loginOperario(@RequestBody OperarioLoginRequestDTO loginDTO) {
+        boolean valido = operarioService.validarLogin(loginDTO);
+        return ResponseEntity.ok(valido);
     }
 
     //    Procedure
