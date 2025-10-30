@@ -1,12 +1,14 @@
 package org.example.sinara.repository.sql;
 
 import org.example.sinara.model.Empresa;
+import org.example.sinara.model.Operario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Map;
+import java.util.Optional;
 
 public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
 
@@ -39,6 +41,12 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
         WHERE e.cnpj = :cnpj
     """, nativeQuery = true)
     Map<String, Object> findIdByCnpj(@Param("cnpj") String cnpj);
+
+    @Query("""
+    SELECT e FROM Empresa e
+    WHERE e.cnpj = :cnpj
+    """)
+    Optional<Empresa> findByCnpj(@Param("cnpj") String cnpj);
 
     //    Métodos derivados
     boolean existsByCodigo(String codigo);

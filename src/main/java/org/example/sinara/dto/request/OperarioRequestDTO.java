@@ -11,9 +11,6 @@ public class OperarioRequestDTO {
     private Integer idEmpresa;
 
     @Size(max = 255, message = "URL deve ter no máximo 255 caracteres")
-    private String url;
-
-    @Size(max = 255, message = "URL deve ter no máximo 255 caracteres")
     private String imagemUrl;
 
     @NotBlank(message = "CPF é obrigatório", groups = OnCreate.class)

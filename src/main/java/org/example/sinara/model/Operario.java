@@ -12,8 +12,6 @@ public class Operario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String url;
-
     private String imagemUrl;
 
     private String cpf;

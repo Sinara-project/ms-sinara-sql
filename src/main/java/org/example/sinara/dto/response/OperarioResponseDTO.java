@@ -13,8 +13,6 @@ public class OperarioResponseDTO {
 
     private Integer idEmpresa;
 
-    private String url;
-
     private String imagemUrl;
 
     private String cpf;
