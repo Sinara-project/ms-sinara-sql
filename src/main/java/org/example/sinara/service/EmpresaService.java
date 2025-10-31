@@ -205,6 +205,17 @@ public class EmpresaService {
         return toResponseDTO(atualizado);
     }
 
+    public EmpresaResponseDTO atualizarSenha(Integer id, String novaSenha) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Empresa com ID " + id + " não encontrada"));
+
+        String senhaCriptografada = passwordEncoder.encode(novaSenha);
+        empresa.setSenha(senhaCriptografada);
+
+        Empresa atualizado = empresaRepository.save(empresa);
+        return toResponseDTO(atualizado);
+    }
+
     //  Query
     public Map<String, Object> buscarPerfilEmpresaPorId(Integer id) {
         Map<String, Object> perfil = empresaRepository.buscarPerfilPorId(id);
