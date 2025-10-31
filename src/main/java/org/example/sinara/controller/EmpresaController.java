@@ -70,6 +70,13 @@ public class EmpresaController implements EmpresaOpenApi {
         return ResponseEntity.ok(atualizado);
     }
 
+    @PatchMapping("/atualizarSenha/{id}")
+    public ResponseEntity<EmpresaResponseDTO> atualizarSenha(@PathVariable Integer id,
+                                                                         @RequestBody SenhaRequestDTO request) {
+        EmpresaResponseDTO atualizado = empresaService.atualizarSenha(id, request.getNovaSenha());
+        return ResponseEntity.ok(atualizado);
+    }
+
     @PostMapping("/loginAreaRestrita")
     public ResponseEntity<Boolean> loginAreaRestrita(@RequestBody LoginRestritoRequestDTO dto) {
         boolean autenticado = empresaService.loginAreaRestrita(dto.getIdEmpresa(), dto.getSenha());
