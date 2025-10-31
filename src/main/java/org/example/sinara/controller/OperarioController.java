@@ -7,8 +7,11 @@ import org.example.sinara.dto.response.OperarioResponseDTO;
 import org.example.sinara.model.Operario;
 import org.example.sinara.open_api.OperarioOpenApi;
 import org.example.sinara.service.OperarioService;
+import org.example.sinara.utils.ReconhecimentoFacial;
 import org.example.sinara.validation.OnCreate;
 import org.example.sinara.validation.OnPatch;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,8 @@ import java.util.Map;
 @RequestMapping("/api/user/operario")
 public class OperarioController implements OperarioOpenApi {
     private final OperarioService operarioService;
+    @Autowired
+    private ReconhecimentoFacial reconhecimentoFacial;
 
     public OperarioController(OperarioService operarioService) {
         this.operarioService = operarioService;
@@ -82,7 +87,7 @@ public class OperarioController implements OperarioOpenApi {
     }
 
     //    Procedure
-    @PostMapping("/atualizar-status")
+    @PostMapping("/atualizarStatus")
     public String atualizarStatus(@RequestParam Integer idOperario,
                                   @RequestParam Boolean ativo,
                                   @RequestParam Boolean ferias) {
@@ -90,7 +95,8 @@ public class OperarioController implements OperarioOpenApi {
     }
 
     //    Reconhecimento facial
-    @PostMapping("/uploadReconhecimento/{id}")
+    @PostMapping(value = "/uploadReconhecimento/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadFotoReconhecimento(
             @PathVariable Integer id,
             @RequestParam("file") MultipartFile file) {
@@ -98,12 +104,13 @@ public class OperarioController implements OperarioOpenApi {
         return ResponseEntity.ok("Imagem de reconhecimento facial salva com sucesso!");
     }
 
-    @PostMapping("/verificarReconhecimento/{id}")
-    public ResponseEntity<Boolean> verificarReconhecimento(
-            @PathVariable Integer id,
-            @RequestParam("file") MultipartFile file) {
-        boolean resultado = operarioService.verificarRosto(id, file);
+    @PostMapping(value = "/verificarFacial",
+        consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Boolean> verificarFacial(
+            @RequestParam("userId") Integer userId,
+            @RequestParam("fotoTeste") MultipartFile fotoTeste) {
+
+        boolean resultado = reconhecimentoFacial.verificarFace(userId, fotoTeste);
         return ResponseEntity.ok(resultado);
     }
-
 }

@@ -11,7 +11,7 @@ import java.util.Map;
 @Component
 public class HttpClientPython {
 
-    private final String baseUrl = "http://localhost:8000"; // Flask
+    private final String baseUrl = "https://sinara-machine-learning-vxyq.onrender.com"; // Flask
 
     // envia imagem inicial e recebe URL do Cloudinary
     public String uploadImagem(MultipartFile file) {
@@ -27,7 +27,7 @@ public class HttpClientPython {
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
             ResponseEntity<Map> response = restTemplate.exchange(
-                    baseUrl + "/upload_image",
+                    baseUrl + "/cloud/upload_image",
                     HttpMethod.POST,
                     requestEntity,
                     Map.class
@@ -60,7 +60,7 @@ public class HttpClientPython {
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
             ResponseEntity<Map> response = restTemplate.exchange(
-                    baseUrl + "/verificar_face",
+                    baseUrl + "/cloud/verificar_face",
                     HttpMethod.POST,
                     requestEntity,
                     Map.class

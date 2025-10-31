@@ -3,8 +3,10 @@ package org.example.sinara.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.sinara.dto.request.EmpresaRequestDTO;
 import org.example.sinara.dto.request.OperarioLoginRequestDTO;
+import org.example.sinara.dto.response.EmpresaLoginResponseDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.exception.CnpjDuplicadoException;
+import org.example.sinara.exception.PlanoNaoEncontradoException;
 import org.example.sinara.model.Empresa;
 import org.example.sinara.model.Planos;
 import org.example.sinara.repository.sql.EmpresaRepository;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.*;
 
@@ -46,7 +49,7 @@ public class EmpresaService {
         empresa.setTelefone(dto.getTelefone());
 
         Planos plano = planosRepository.findById(dto.getIdPlano())
-                .orElseThrow(() -> new RuntimeException("Plano não encontrado"));
+                .orElseThrow(() -> new PlanoNaoEncontradoException(dto.getIdPlano()));
         empresa.setIdPlano(plano);
 
         return empresa;
@@ -84,7 +87,7 @@ public class EmpresaService {
                 .toList();
     }
 
-    public EmpresaResponseDTO inserirEmpresa(EmpresaRequestDTO dto) {
+    public EmpresaLoginResponseDTO inserirEmpresa(EmpresaRequestDTO dto) {
         if (empresaRepository.existsByCnpj(dto.getCnpj())) {
             throw new CnpjDuplicadoException(dto.getCnpj());
         }
@@ -102,8 +105,16 @@ public class EmpresaService {
         empresa.setCodigo(codigoGerado);
         empresa.setSenhaAreaRestrita(passwordEncoder.encode(dto.getSenhaAreaRestrita()));
 
-        Empresa salvo = empresaRepository.save(empresa);
-        return toResponseDTO(salvo);
+        Empresa salva = empresaRepository.save(empresa);
+
+        return new EmpresaLoginResponseDTO(
+                salva.getId(),
+                salva.getCnpj(),
+                salva.getCodigo(),
+                salva.getNome(),
+                salva.getEmail(),
+                salva.getRamoAtuacao()
+        );
     }
 
     private String gerarCodigoAleatorio() {
@@ -205,9 +216,28 @@ public class EmpresaService {
         return dados;
     }
 
-    public boolean validarLogin(String cnpj, String senhaDigitada) {
+    public EmpresaLoginResponseDTO loginEmpresa(String cnpj, String senhaDigitada) {
         return empresaRepository.findByCnpj(cnpj)
-                .map(empresa -> passwordEncoder.matches(senhaDigitada, empresa.getSenha()))
+                .map(empresa -> {
+                    if (passwordEncoder.matches(senhaDigitada, empresa.getSenha())) {
+                        return new EmpresaLoginResponseDTO(
+                                empresa.getId(),
+                                empresa.getCnpj(),
+                                empresa.getCodigo(),
+                                empresa.getNome(),
+                                empresa.getEmail(),
+                                empresa.getRamoAtuacao()
+                        );
+                    } else {
+                        throw new RuntimeException("Senha incorreta");
+                    }
+                })
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+    }
+
+    public boolean loginAreaRestrita(Integer idEmpresa, String senhaDigitada) {
+        return empresaRepository.findById(idEmpresa)
+                .map(empresa -> passwordEncoder.matches(senhaDigitada, empresa.getSenhaAreaRestrita()))
                 .orElse(false);
     }
 
