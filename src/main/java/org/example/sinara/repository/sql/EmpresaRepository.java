@@ -53,6 +53,8 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
 
     boolean existsByCnpj(String cnpj);
 
+    boolean existsByEmail(String email);
+
     //Procedure
     @Procedure(procedureName = "mudar_para_premium")
     void mudarParaPremium(@Param("p_id_empresa") Integer empresaId,
