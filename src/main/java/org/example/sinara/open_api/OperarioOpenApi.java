@@ -142,7 +142,7 @@ public interface OperarioOpenApi {
             @ApiResponse(responseCode = "200", description = "Login verificado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     })
-    ResponseEntity<Boolean> loginOperario(
+    ResponseEntity<?>  loginOperario(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Dados de login do operário",
                     required = true,

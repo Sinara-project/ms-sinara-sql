@@ -202,14 +202,20 @@ public class OperarioService {
         return operarios;
     }
 
-    public boolean validarLogin(OperarioLoginRequestDTO loginDTO) {
+    public Integer validarLogin(OperarioLoginRequestDTO loginDTO) {
         return operarioRepository.findByLogin(
-                        loginDTO.getEmail(),
-                        loginDTO.getCpf(),
-                        loginDTO.getCodigoEmpresa()
-                ).map(operario -> passwordEncoder.matches(loginDTO.getSenha(), operario.getSenha()))
-                .orElse(false);
+                loginDTO.getEmail(),
+                loginDTO.getCpf(),
+                loginDTO.getCodigoEmpresa()
+        ).map(operario -> {
+            if (passwordEncoder.matches(loginDTO.getSenha(), operario.getSenha())) {
+                return operario.getId();
+            } else {
+                throw new RuntimeException("Senha incorreta");
+            }
+        }).orElseThrow(() -> new RuntimeException("Operário não encontrado"));
     }
+
 
     //Procedure
     @Transactional

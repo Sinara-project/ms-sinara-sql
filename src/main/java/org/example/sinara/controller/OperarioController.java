@@ -81,9 +81,13 @@ public class OperarioController implements OperarioOpenApi {
     }
 
     @PostMapping("/loginOperario")
-    public ResponseEntity<Boolean> loginOperario(@RequestBody OperarioLoginRequestDTO loginDTO) {
-        boolean valido = operarioService.validarLogin(loginDTO);
-        return ResponseEntity.ok(valido);
+    public ResponseEntity<?> loginOperario(@RequestBody OperarioLoginRequestDTO loginDTO) {
+        try {
+            Integer idOperario = operarioService.validarLogin(loginDTO);
+            return ResponseEntity.ok(idOperario);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     //    Procedure
