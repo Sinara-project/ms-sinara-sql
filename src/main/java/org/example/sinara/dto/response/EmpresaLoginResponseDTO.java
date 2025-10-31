@@ -17,4 +17,6 @@ public class EmpresaLoginResponseDTO {
     private String email;
 
     private String ramoAtuacao;
+
+    private String imagemUrl;
 }

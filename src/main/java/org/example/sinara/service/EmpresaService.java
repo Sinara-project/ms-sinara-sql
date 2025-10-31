@@ -6,6 +6,7 @@ import org.example.sinara.dto.request.OperarioLoginRequestDTO;
 import org.example.sinara.dto.response.EmpresaLoginResponseDTO;
 import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.exception.CnpjDuplicadoException;
+import org.example.sinara.exception.EmailDuplicadoException;
 import org.example.sinara.exception.PlanoNaoEncontradoException;
 import org.example.sinara.model.Empresa;
 import org.example.sinara.model.Planos;
@@ -92,6 +93,10 @@ public class EmpresaService {
             throw new CnpjDuplicadoException(dto.getCnpj());
         }
 
+        if (empresaRepository.existsByEmail(dto.getEmail())) {
+            throw new EmailDuplicadoException(dto.getEmail());
+        }
+
         Empresa empresa = toEntity(dto);
 
         String codigoGerado;
@@ -110,10 +115,11 @@ public class EmpresaService {
         return new EmpresaLoginResponseDTO(
                 salva.getId(),
                 salva.getCnpj(),
-                salva.getCodigo(),
                 salva.getNome(),
+                salva.getCodigo(),
                 salva.getEmail(),
-                salva.getRamoAtuacao()
+                salva.getRamoAtuacao(),
+                salva.getImagemUrl()
         );
     }
 
@@ -223,10 +229,11 @@ public class EmpresaService {
                         return new EmpresaLoginResponseDTO(
                                 empresa.getId(),
                                 empresa.getCnpj(),
-                                empresa.getCodigo(),
                                 empresa.getNome(),
+                                empresa.getCodigo(),
                                 empresa.getEmail(),
-                                empresa.getRamoAtuacao()
+                                empresa.getRamoAtuacao(),
+                                empresa.getImagemUrl()
                         );
                     } else {
                         throw new RuntimeException("Senha incorreta");
