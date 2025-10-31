@@ -45,7 +45,7 @@ public interface EmpresaOpenApi {
             @ApiResponse(responseCode = "200", description = "Empresa inserida com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
     })
-    ResponseEntity<String> inserirEmpresa(
+    ResponseEntity<?> inserirEmpresa(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Dados da nova empresa",
                     required = true,

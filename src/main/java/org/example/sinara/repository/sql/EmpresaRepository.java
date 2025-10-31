@@ -45,7 +45,7 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
     @Query("""
     SELECT e FROM Empresa e
     WHERE e.cnpj = :cnpj
-    """)
+""")
     Optional<Empresa> findByCnpj(@Param("cnpj") String cnpj);
 
     //    Métodos derivados

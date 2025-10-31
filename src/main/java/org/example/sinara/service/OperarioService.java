@@ -7,15 +7,20 @@ import org.example.sinara.dto.request.OperarioRequestDTO;
 import org.example.sinara.dto.response.OperarioResponseDTO;
 import org.example.sinara.exception.CpfDuplicadoException;
 import org.example.sinara.exception.EmailDuplicadoException;
+import org.example.sinara.exception.EmpresaNaoEncontradaException;
 import org.example.sinara.model.Empresa;
 import org.example.sinara.model.Operario;
 import org.example.sinara.repository.sql.EmpresaRepository;
 import org.example.sinara.repository.sql.OperarioRepository;
 import org.example.sinara.utils.HttpClientPython;
+import org.example.sinara.utils.ReconhecimentoFacial;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -31,6 +36,7 @@ import java.util.Map;
 public class OperarioService {
     private final OperarioRepository operarioRepository;
     private final EmpresaRepository empresaRepository;
+    private final ReconhecimentoFacial reconhecimentoFacial;
     private ObjectMapper objectMapper;
     private static final String RECONHECIMENTO_DIR = "uploads/reconhecimento";
     private final HttpClientPython httpClientPython;
@@ -42,13 +48,14 @@ public class OperarioService {
             EmpresaRepository empresaRepository,
             ObjectMapper objectMapper,
             HttpClientPython httpClientPython,
-            PasswordEncoder passwordEncoder
-    ) {
+            PasswordEncoder passwordEncoder,
+            ReconhecimentoFacial reconhecimentoFacial) {
         this.operarioRepository = operarioRepository;
         this.empresaRepository = empresaRepository;
         this.objectMapper = objectMapper;
         this.httpClientPython = httpClientPython;
         this.passwordEncoder = passwordEncoder;
+        this.reconhecimentoFacial = reconhecimentoFacial;
     }
 
 
@@ -67,7 +74,8 @@ public class OperarioService {
         operario.setHorasPrevistas(dto.getHorasPrevistas());
 
         Empresa empresa = empresaRepository.findById(dto.getIdEmpresa())
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+                .orElseThrow(() -> new EmpresaNaoEncontradaException(dto.getIdEmpresa()));
+
         operario.setIdEmpresa(empresa);
 
         return operario;
@@ -221,23 +229,20 @@ public class OperarioService {
         Operario operario = operarioRepository.findById(idOperario)
                 .orElseThrow(() -> new RuntimeException("Operário não encontrado."));
 
-        // Chama flask para upload no cloudinary
+        // chama flask para upload no cloudinary
         String imageUrl = httpClientPython.uploadImagem(file);
 
-        // Salva url no banco
         operario.setImagemUrl(imageUrl);
         operarioRepository.save(operario);
     }
 
-    public boolean verificarRosto(Integer idOperario, MultipartFile file) {
-        Operario operario = operarioRepository.findById(idOperario)
-                .orElseThrow(() -> new RuntimeException("Operário não encontrado."));
 
-        if (operario.getImagemUrl() == null || operario.getImagemUrl().isEmpty()) {
-            throw new RuntimeException("Operário não possui imagem de reconhecimento cadastrada.");
-        }
+    @PostMapping("/verificar-facial")
+    public ResponseEntity<Boolean> verificarFacial(
+            @RequestParam("userId") Integer userId,
+            @RequestParam("fotoTeste") MultipartFile fotoTeste) {
 
-        // passa a foto tirada diretamente
-        return httpClientPython.chamarVerificacaoFacial(idOperario, file);
+        boolean resultado = reconhecimentoFacial.verificarFace(userId, fotoTeste);
+        return ResponseEntity.ok(resultado);
     }
 }

@@ -1,15 +1,15 @@
 package org.example.sinara.dto.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.example.sinara.validation.OnCreate;
 
 @Data
 public class EmpresaRequestDTO {
+
     @NotBlank(message = "CNPJ é obrigatório", groups = OnCreate.class)
+    @Pattern(regexp = "\\d{14}", message = "CNPJ deve ter 14 números")
     private String cnpj;
 
     @NotBlank(message = "Nome é obrigatório", groups = OnCreate.class)
@@ -45,5 +45,7 @@ public class EmpresaRequestDTO {
     @Size(max = 20, message = "O telefone deve ter no máximo 20 caracteres")
     private String telefone;
 
+    @NotNull(message = "O id do plano é obrigatório")
+    @Min(value = 1, message = "O id do plano deve ser maior que 0")
     private Integer idPlano;
 }
