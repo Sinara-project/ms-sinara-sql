@@ -62,6 +62,14 @@ public class OperarioController implements OperarioOpenApi {
         return ResponseEntity.ok("Operário atualizado com sucesso!");
     }
 
+    @PostMapping("/verificarSenha")
+    public ResponseEntity<Boolean> verificarSenha(
+            @RequestParam Integer idOperario,
+            @RequestParam String senha) {
+        boolean valida = operarioService.verificarSenha(idOperario, senha);
+        return ResponseEntity.ok(valida);
+    }
+
     //    Query
     @GetMapping("/perfilOperario/{id}")
     public ResponseEntity<Map<String, Object>> buscarPerfil(@PathVariable Integer id) {

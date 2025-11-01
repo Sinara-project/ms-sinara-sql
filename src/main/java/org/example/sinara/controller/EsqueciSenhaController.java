@@ -35,7 +35,7 @@ public class EsqueciSenhaController {
 
         String token = UUID.randomUUID().toString();
 
-        String link = "https://seudominio.com/redefinir?token=" + token;
+        String link = "https://ms-sinara-sql-oox0.onrender.com/empresa/redefinir?token=" + token;
 
         try {
             emailService.enviarEmail(
