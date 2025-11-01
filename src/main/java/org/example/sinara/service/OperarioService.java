@@ -174,7 +174,14 @@ public class OperarioService {
         return toResponseDTO(atualizado);
     }
 
-//  Query
+    public boolean verificarSenha(Integer idOperario, String senhaDigitada) {
+        Operario operario = operarioRepository.findById(idOperario)
+                .orElseThrow(() -> new EntityNotFoundException("Operário com ID " + idOperario + " não encontrado"));
+
+        return passwordEncoder.matches(senhaDigitada, operario.getSenha());
+    }
+
+    //  Query
     public Map<String, Object> buscarPerfilOperarioPorId(Integer id) {
         Map<String, Object> perfil = operarioRepository.buscarPerfilOperarioPorId(id);
 
