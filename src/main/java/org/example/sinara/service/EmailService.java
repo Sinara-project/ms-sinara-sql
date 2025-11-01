@@ -28,13 +28,13 @@ public class EmailService {
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
             request.setBody(mail.build());
-            System.out.println("📤 Enviando e-mail para: " + destinatario);
-            System.out.println("🔑 API Key iniciando com: " + sendGridApiKey.substring(0, 5));
+            System.out.println("Enviando e-mail para: " + destinatario);
+            System.out.println("API Key iniciando com: " + sendGridApiKey.substring(0, 5));
             sg.api(request);
             Response response = sg.api(request);
-            System.out.println("✅ Status: " + response.getStatusCode());
-            System.out.println("✅ Body: " + response.getBody());
-            System.out.println("✅ Headers: " + response.getHeaders());
+            System.out.println("Status: " + response.getStatusCode());
+            System.out.println("Body: " + response.getBody());
+            System.out.println("Headers: " + response.getHeaders());
         } catch (IOException ex) {
             throw ex;
         }
