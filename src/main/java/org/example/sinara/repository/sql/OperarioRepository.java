@@ -68,4 +68,6 @@ public interface OperarioRepository extends JpaRepository<Operario, Integer> {
     boolean existsByCpf(String cpf);
 
     boolean existsByEmail(String email);
+
+    Optional<Operario> findByEmailIgnoreCase(String email);
 }

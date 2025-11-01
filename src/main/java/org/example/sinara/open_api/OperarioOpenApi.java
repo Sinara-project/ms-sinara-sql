@@ -151,4 +151,46 @@ public interface OperarioOpenApi {
             org.example.sinara.dto.request.OperarioLoginRequestDTO loginDTO
     );
 
+    @Operation(
+            summary = "Envia imagem para reconhecimento facial do operário",
+            description = "Recebe uma imagem (foto) enviada pelo cliente e associa ao operário identificado pelo ID informado. "
+                    + "A imagem será utilizada posteriormente para autenticação facial do operário."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Imagem de reconhecimento facial salva com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida ou formato de arquivo incorreto"),
+            @ApiResponse(responseCode = "404", description = "Operário não encontrado para o ID informado")
+    })
+    ResponseEntity<String> uploadFotoReconhecimento(
+            @Parameter(description = "ID do operário para associar a imagem", required = true)
+            Integer id,
+            @Parameter(
+                    description = "Arquivo de imagem contendo o rosto do operário (formato .jpg, .jpeg ou .png)",
+                    required = true,
+                    content = @Content(mediaType = "multipart/form-data")
+            )
+            org.springframework.web.multipart.MultipartFile file
+    );
+
+
+    @Operation(
+            summary = "Verifica o reconhecimento facial do operário",
+            description = "Compara uma imagem enviada pelo cliente com a imagem de referência armazenada para o operário informado. "
+                    + "Retorna **true** se o rosto for reconhecido com sucesso, ou **false** caso contrário."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Verificação facial realizada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida ou formato de imagem incorreto"),
+            @ApiResponse(responseCode = "404", description = "Operário não encontrado ou sem imagem cadastrada")
+    })
+    ResponseEntity<Boolean> verificarFacial(
+            @Parameter(description = "ID do operário a ser verificado", required = true)
+            Integer userId,
+            @Parameter(
+                    description = "Imagem capturada para verificação facial (formato .jpg, .jpeg ou .png)",
+                    required = true,
+                    content = @Content(mediaType = "multipart/form-data")
+            )
+            org.springframework.web.multipart.MultipartFile fotoTeste
+    );
 }
