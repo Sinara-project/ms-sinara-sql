@@ -22,8 +22,8 @@ public interface EmpresaOpenApi {
             description = "Retorna um produto contendo todas as informações da empresa pelo seu ID."
     )
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Empresa encontrada"),
-        @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
+            @ApiResponse(responseCode = "200", description = "Empresa encontrada"),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
     })
     ResponseEntity<EmpresaResponseDTO> buscarEmpresaPorId(
             @Parameter(description = "ID da empresa a ser buscada", required = true)
@@ -83,7 +83,7 @@ public interface EmpresaOpenApi {
                     required = true,
                     content = @Content(schema = @Schema(implementation = EmpresaRequestDTO.class))
             )
-           EmpresaRequestDTO dto
+            EmpresaRequestDTO dto
     );
 
     @Operation(
@@ -150,5 +150,68 @@ public interface EmpresaOpenApi {
             @RequestParam Integer idEmpresa,
             @Parameter(description = "ID do cartão usado para pagamento", required = true)
             @RequestParam Integer idCartao
+    );
+
+    @Operation(
+            summary = "Realiza o login da área restrita da empresa",
+            description = "Valida as credenciais de acesso à área restrita da empresa com base no ID e na senha informados. "
+                    + "Retorna **true** se as credenciais forem válidas e **false** caso contrário."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Login verificado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
+            @ApiResponse(responseCode = "401", description = "Credenciais incorretas"),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
+    })
+    ResponseEntity<Boolean> loginAreaRestrita(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Dados de login da área restrita (ID da empresa e senha)",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = org.example.sinara.dto.request.LoginRestritoRequestDTO.class))
+            )
+            org.example.sinara.dto.request.LoginRestritoRequestDTO dto
+    );
+
+    @Operation(
+            summary = "Realiza o login da empresa no sistema",
+            description = "Autentica a empresa com base no **CNPJ** e **senha** informados. "
+                    + "Retorna as informações da empresa em caso de sucesso ou uma mensagem de erro caso as credenciais sejam inválidas."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Login realizado com sucesso",
+                    content = @Content(schema = @Schema(implementation = org.example.sinara.dto.response.EmpresaLoginResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada ou senha incorreta")
+    })
+    ResponseEntity<?> login(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Dados de login da empresa (CNPJ e senha)",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = org.example.sinara.dto.request.EmpresaLoginRequestDTO.class))
+            )
+            org.example.sinara.dto.request.EmpresaLoginRequestDTO loginDTO
+    );
+
+
+    @Operation(
+            summary = "Atualiza a senha de uma empresa",
+            description = "Atualiza a senha de acesso de uma empresa com base no ID informado. "
+                    + "Este endpoint deve ser utilizado para redefinir a senha de login da empresa no sistema."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Senha atualizada com sucesso",
+                    content = @Content(schema = @Schema(implementation = org.example.sinara.dto.response.EmpresaResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida ou senha fora dos padrões permitidos"),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
+    })
+    ResponseEntity<org.example.sinara.dto.response.EmpresaResponseDTO> atualizarSenha(
+            @Parameter(description = "ID da empresa que terá a senha atualizada", required = true)
+            Integer id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Nova senha a ser configurada para a empresa",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = org.example.sinara.dto.request.SenhaRequestDTO.class))
+            )
+            org.example.sinara.dto.request.SenhaRequestDTO request
     );
 }
