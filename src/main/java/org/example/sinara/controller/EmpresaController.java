@@ -83,13 +83,6 @@ public class EmpresaController implements EmpresaOpenApi {
         return ResponseEntity.ok(autenticado);
     }
 
-    @PostMapping("/validarCodigo")
-    public ResponseEntity<Boolean> validarCodigo(@RequestParam String cnpj,
-                                                 @RequestParam String codigo) {
-        boolean valido = empresaService.validarCodigoPorCnpj(cnpj, codigo);
-        return ResponseEntity.ok(valido);
-    }
-
     //    Query
     @GetMapping("/listarPerfilEmpresa/{id}")
     public ResponseEntity<Map<String, Object>> buscarPerfil(@PathVariable Integer id) {

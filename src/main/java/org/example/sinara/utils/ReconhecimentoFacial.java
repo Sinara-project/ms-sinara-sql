@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ReconhecimentoFacial {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String baseUrl = "http://35.174.7.143:8000/face/verificar_face";
+    private final String baseUrl = "http://3.224.165.233:8000/face/verificar_face";
 
     public boolean verificarFace(Integer userId, MultipartFile fotoTeste) {
         try {

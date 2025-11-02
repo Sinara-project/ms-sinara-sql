@@ -193,4 +193,21 @@ public interface OperarioOpenApi {
             )
             org.springframework.web.multipart.MultipartFile fotoTeste
     );
+
+    @Operation(
+            summary = "Verifica a senha do operário",
+            description = "Valida se a senha fornecida pelo operário corresponde à senha cadastrada no sistema. "
+                    + "Retorna true se a senha estiver correta, ou false caso contrário."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Senha verificada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
+            @ApiResponse(responseCode = "404", description = "Operário não encontrado")
+    })
+    ResponseEntity<Boolean> verificarSenha(
+            @Parameter(description = "ID do operário cuja senha será verificada", required = true)
+            Integer idOperario,
+            @Parameter(description = "Senha a ser verificada", required = true)
+            String senha
+    );
 }

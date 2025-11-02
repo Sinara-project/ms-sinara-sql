@@ -216,12 +216,6 @@ public class EmpresaService {
         return toResponseDTO(atualizado);
     }
 
-    public boolean validarCodigoPorCnpj(String cnpj, String codigo) {
-        return empresaRepository.findByCnpj(cnpj)
-                .map(empresa -> empresa.getCodigo().equals(codigo))
-                .orElse(false);
-    }
-
     //  Query
     public Map<String, Object> buscarPerfilEmpresaPorId(Integer id) {
         Map<String, Object> perfil = empresaRepository.buscarPerfilPorId(id);
