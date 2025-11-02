@@ -5,6 +5,11 @@ Ele expõe múltiplos endpoints RESTful, divididos entre áreas **admin**, **use
 
 ---
 
+## Modelo Conceitual - PostgreSQL
+<img width="1533" height="696" alt="Lógico_Final" src="https://github.com/user-attachments/assets/d89b2656-18a2-4c06-94d8-c8c810eda696" />
+
+---
+
 ## Controllers e Endpoints
 
 ### AcessoDiarioUsuariosController
