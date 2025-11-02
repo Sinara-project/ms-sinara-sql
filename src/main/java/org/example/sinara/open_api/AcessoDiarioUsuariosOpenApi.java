@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
-//@Tag(name = "Acesso Diário de Usuários", description = "Endpoints para registrar atividades diárias dos operários")
 public interface AcessoDiarioUsuariosOpenApi {
 
     @Operation(

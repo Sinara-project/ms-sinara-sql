@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.sinara.dto.request.OperarioLoginRequestDTO;
 import org.example.sinara.dto.request.OperarioRequestDTO;
+import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.dto.response.OperarioResponseDTO;
 import org.example.sinara.exception.CpfDuplicadoException;
 import org.example.sinara.exception.EmailDuplicadoException;
@@ -179,6 +180,17 @@ public class OperarioService {
                 .orElseThrow(() -> new EntityNotFoundException("Operário com ID " + idOperario + " não encontrado"));
 
         return passwordEncoder.matches(senhaDigitada, operario.getSenha());
+    }
+
+    public OperarioResponseDTO atualizarSenha(Integer id, String novaSenha) {
+        Operario operario = operarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Operario com ID " + id + " não encontradoa"));
+
+        String senhaCriptografada = passwordEncoder.encode(novaSenha);
+        operario.setSenha(senhaCriptografada);
+
+        Operario atualizado = operarioRepository.save(operario);
+        return toResponseDTO(atualizado);
     }
 
     //  Query

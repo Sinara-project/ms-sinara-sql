@@ -3,6 +3,8 @@ package org.example.sinara.controller;
 import jakarta.validation.groups.Default;
 import org.example.sinara.dto.request.OperarioLoginRequestDTO;
 import org.example.sinara.dto.request.OperarioRequestDTO;
+import org.example.sinara.dto.request.SenhaRequestDTO;
+import org.example.sinara.dto.response.EmpresaResponseDTO;
 import org.example.sinara.dto.response.OperarioResponseDTO;
 import org.example.sinara.model.Operario;
 import org.example.sinara.open_api.OperarioOpenApi;
@@ -68,6 +70,13 @@ public class OperarioController implements OperarioOpenApi {
             @RequestParam String senha) {
         boolean valida = operarioService.verificarSenha(idOperario, senha);
         return ResponseEntity.ok(valida);
+    }
+
+    @PatchMapping("/atualizarSenha/{id}")
+    public ResponseEntity<OperarioResponseDTO> atualizarSenha(@PathVariable Integer id,
+                                                             @RequestBody SenhaRequestDTO request) {
+        OperarioResponseDTO atualizado = operarioService.atualizarSenha(id, request.getNovaSenha());
+        return ResponseEntity.ok(atualizado);
     }
 
     //    Query
