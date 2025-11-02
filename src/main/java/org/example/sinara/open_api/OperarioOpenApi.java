@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.example.sinara.dto.request.OperarioRequestDTO;
+import org.example.sinara.dto.request.SenhaRequestDTO;
 import org.example.sinara.dto.response.OperarioResponseDTO;
 import org.example.sinara.model.Operario;
 import org.springframework.http.ResponseEntity;
@@ -209,5 +210,27 @@ public interface OperarioOpenApi {
             Integer idOperario,
             @Parameter(description = "Senha a ser verificada", required = true)
             String senha
+    );
+
+    @Operation(
+            summary = "Atualiza a senha do operário",
+            description = "Permite atualizar a senha de um operário específico com base no ID informado. " +
+                    "Recebe a nova senha no corpo da requisição e retorna o operário atualizado."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Senha atualizada com sucesso",
+                    content = @Content(schema = @Schema(implementation = OperarioResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
+            @ApiResponse(responseCode = "404", description = "Operário não encontrado")
+    })
+    ResponseEntity<OperarioResponseDTO> atualizarSenha(
+            @Parameter(description = "ID do operário cuja senha será atualizada", required = true)
+            Integer id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Nova senha do operário",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = SenhaRequestDTO.class))
+            )
+            SenhaRequestDTO request
     );
 }
